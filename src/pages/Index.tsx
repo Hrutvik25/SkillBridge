@@ -94,30 +94,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 bg-card border-b border-border">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className="text-center animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="flex justify-center mb-3">
-                  <div className="p-3 rounded-lg bg-primary/10">
-                    <stat.icon className="h-6 w-6 text-primary" />
-                  </div>
-                </div>
-                <div className="text-2xl lg:text-3xl font-bold text-foreground mb-1">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+    
 
       {/* Featured Courses - COMMENTED OUT FOR NOW */}
       {/* 
