@@ -219,12 +219,20 @@ export default function CourseDetail() {
                   <div className="flex justify-between">
                     <dt className="text-muted-foreground">Duration</dt>
                     <dd className="font-medium text-foreground">
-                      {course.duration_weeks ? `${course.duration_weeks} weeks` : "Self-paced"}
+                      {course.duration || "Not specified"}
                     </dd>
                   </div>
                   <div className="flex justify-between">
-                    <dt className="text-muted-foreground">Level</dt>
-                    <dd className="font-medium text-foreground">All Levels</dd>
+                    <dt className="text-muted-foreground">Date</dt>
+                    <dd className="font-medium text-foreground">
+                      {course.date || "Not specified"}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Mode</dt>
+                    <dd className="font-medium text-foreground">
+                      {course.mode && course.mode.length > 0 ? course.mode.join(", ") : "Not specified"}
+                    </dd>
                   </div>
                   <div className="flex justify-between">
                     <dt className="text-muted-foreground">Price</dt>

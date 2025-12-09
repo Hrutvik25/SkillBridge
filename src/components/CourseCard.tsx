@@ -26,7 +26,7 @@ export function CourseCard({
   return (
     <div className="group bg-card rounded-xl border border-border overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
       {/* Image */}
-      <div className="relative aspect-video overflow-hidden bg-muted">
+      <div className="relative h-64 overflow-hidden bg-muted">
         {imageUrl ? (
           <img
             src={imageUrl}

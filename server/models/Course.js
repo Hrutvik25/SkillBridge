@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema({
-  title: {
+  course_name: {
     type: String,
     required: true,
     trim: true
@@ -13,11 +13,19 @@ const courseSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
+  description: {
+    type: String,
+    default: null
+  },
   short_description: {
     type: String,
     default: null
   },
   full_description: {
+    type: String,
+    default: null
+  },
+  image: {
     type: String,
     default: null
   },
@@ -27,18 +35,33 @@ const courseSchema = new mongoose.Schema({
   },
   price: {
     type: Number,
-    default: 0
+    default: null
+  },
+  date: {
+    type: String,
+    required: true,
+    default: "Flexible"
+  },
+  duration: {
+    type: String,
+    required: true,
+    trim: true
   },
   duration_weeks: {
     type: Number,
     default: null
   },
+  mode: [{
+    type: String,
+    enum: ['online', 'offline'],
+    required: true
+  }],
   tags: [{
     type: String
   }],
   published: {
     type: Boolean,
-    default: false
+    default: true
   },
   created_at: {
     type: Date,

@@ -150,15 +150,53 @@ export const adminApi = {
     });
   },
 
+  updateMentor: async (id: string, mentor: Partial<Mentor>) => {
+    return apiRequest<Mentor>(`/admin/mentors/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(mentor),
+    });
+  },
+
   deleteMentor: async (id: string) => {
     return apiRequest<{ message: string }>(`/admin/mentors/${id}`, {
       method: 'DELETE',
     });
   },
 
+  uploadImage: async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+    const token = getToken();
+    
+    const headers: HeadersInit = {
+      ...(token && { Authorization: `Bearer ${token}` }),
+    };
+
+    const response = await fetch(`${API_BASE_URL}/admin/upload-image`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Image upload failed');
+    }
+
+    return data.url;
+  },
+
   addCourse: async (course: Partial<Course>) => {
     return apiRequest<Course>('/admin/courses', {
       method: 'POST',
+      body: JSON.stringify(course),
+    });
+  },
+
+  updateCourse: async (id: string, course: Partial<Course>) => {
+    return apiRequest<Course>(`/admin/courses/${id}`, {
+      method: 'PUT',
       body: JSON.stringify(course),
     });
   },
@@ -182,17 +220,23 @@ export interface User {
 export type AppRole = 'user' | 'admin' | 'mentor';
 
 export interface Course {
-  _id: string;
-  title: string;
-  slug: string;
-  short_description: string | null;
-  full_description: string | null;
-  image_url: string | null;
-  price: number | null;
-  duration_weeks: number | null;
-  tags: string[] | null;
-  published: boolean;
-  created_at: string;
+  _id?: string;
+  title?: string;
+  course_name?: string;
+  slug?: string;
+  short_description?: string | null;
+  description?: string | null;
+  full_description?: string | null;
+  image?: string | null;
+  image_url?: string | null;
+  date?: string;
+  duration?: string;
+  price?: number | null;
+  duration_weeks?: number | null;
+  mode?: ("online" | "offline")[];
+  tags?: string[] | null;
+  published?: boolean;
+  created_at?: string;
 }
 
 export interface Mentor {

@@ -1,0 +1,188 @@
+{
+  "predefinedCourses": [
+    {
+      "course_name": "1 Month Program (Students)",
+      "image": "students_program.jpg",
+      "date": "January 2026",
+      "duration": "1 Month / 12 Sessions",
+      "description": "Domain + 2 Tech + 2 Softskills. Online or Offline batches. Classes 3 days a week (6–8 PM).",
+      "price": null,
+      "mode": ["online", "offline"]
+    },
+    {
+      "course_name": "Career Acceleration Program (Working Professionals)",
+      "image": "professionals_program.jpg",
+      "date": "January 2026",
+      "duration": "12 Hours (Weekend Batches)",
+      "description": "Weekend Online or Offline sessions focusing on Domain + Softskills.",
+      "price": null,
+      "mode": ["online", "offline"]
+    },
+    {
+      "course_name": "Customized College Training Program",
+      "image": "college_program.jpg",
+      "date": "Flexible",
+      "duration": "Custom Duration",
+      "description": "Curriculum customization, flexible timings, and bulk training options designed for colleges and institutions to enhance placement outcomes.",
+      "price": null,
+      "mode": ["online", "offline"]
+    }
+  ],
+  "requiredFields": {
+    "course_name": {
+      "type": "string",
+      "required": true,
+      "minLength": 3,
+      "description": "Display title of the course"
+    },
+    "image": {
+      "type": "string|File",
+      "required": false,
+      "description": "Image URL or File (uploaded and returns URL)"
+    },
+    "date": {
+      "type": "string",
+      "required": true,
+      "examples": ["January 2026", "Flexible"],
+      "description": "Start date of the course"
+    },
+    "duration": {
+      "type": "string",
+      "required": true,
+      "examples": ["1 Month / 12 Sessions", "12 Hours (Weekend Batches)"],
+      "description": "Human-friendly duration"
+    },
+    "description": {
+      "type": "string",
+      "required": false,
+      "recommended": true,
+      "description": "Course description"
+    },
+    "price": {
+      "type": "number|null",
+      "required": false,
+      "default": null,
+      "minimum": 0,
+      "description": "Course price in USD, or null for free"
+    },
+    "mode": {
+      "type": "array",
+      "required": true,
+      "allowedValues": ["online", "offline"],
+      "minItems": 1,
+      "description": "Must contain at least one of: online, offline"
+    }
+  },
+  "exampleCreateRequest": {
+    "course_name": "Advanced Python Programming",
+    "image_url": "/uploads/courses/python-course.jpg",
+    "date": "February 2026",
+    "duration": "2 Months / 8 Sessions",
+    "description": "Learn advanced Python concepts including async, decorators, and metaprogramming. Online classes 2 days a week.",
+    "price": 199,
+    "mode": ["online"]
+  },
+  "exampleDatabaseModel": {
+    "_id": "507f1f77bcf86cd799439011",
+    "course_name": "1 Month Program (Students)",
+    "slug": "1-month-program-students",
+    "image": "students_program.jpg",
+    "image_url": "students_program.jpg",
+    "date": "January 2026",
+    "duration": "1 Month / 12 Sessions",
+    "description": "Domain + 2 Tech + 2 Softskills. Online or Offline batches. Classes 3 days a week (6–8 PM).",
+    "short_description": "Domain + 2 Tech + 2 Softskills. Online or Offline batches. Classes 3 days a week (6–8 PM).",
+    "full_description": null,
+    "price": null,
+    "mode": ["online", "offline"],
+    "duration_weeks": null,
+    "tags": [],
+    "published": true,
+    "created_at": "2026-01-15T10:30:00.000Z"
+  },
+  "validationRules": {
+    "course_name": {
+      "minLength": 3,
+      "required": true,
+      "message": "Course name must be at least 3 characters"
+    },
+    "date": {
+      "required": true,
+      "message": "Date is required"
+    },
+    "duration": {
+      "required": true,
+      "message": "Duration is required"
+    },
+    "mode": {
+      "required": true,
+      "minItems": 1,
+      "message": "Select at least one mode (online/offline)"
+    },
+    "price": {
+      "type": "number",
+      "minimum": 0,
+      "message": "Price must be a positive number"
+    },
+    "image": {
+      "fileTypes": ["image/jpeg", "image/png", "image/gif"],
+      "maxSize": 5242880,
+      "message": "Image must be JPG, PNG or GIF (max 5MB)"
+    }
+  },
+  "adminFormFieldOrder": [
+    "course_name",
+    "image",
+    "date",
+    "duration",
+    "description",
+    "price",
+    "mode"
+  ],
+  "adminFormConfiguration": {
+    "course_name": {
+      "type": "text",
+      "placeholder": "e.g., 1 Month Program (Students)",
+      "required": true,
+      "minLength": 3
+    },
+    "image": {
+      "type": "file-upload",
+      "accept": "image/*",
+      "maxSize": "5MB",
+      "required": false,
+      "preview": true
+    },
+    "date": {
+      "type": "text",
+      "placeholder": "e.g., January 2026 or Flexible",
+      "required": true
+    },
+    "duration": {
+      "type": "text",
+      "placeholder": "e.g., 1 Month / 12 Sessions",
+      "required": true
+    },
+    "description": {
+      "type": "textarea",
+      "rows": 3,
+      "placeholder": "Course description...",
+      "required": false
+    },
+    "price": {
+      "type": "number",
+      "placeholder": "0",
+      "min": 0,
+      "required": false
+    },
+    "mode": {
+      "type": "checkboxes",
+      "options": [
+        {"value": "online", "label": "Online"},
+        {"value": "offline", "label": "Offline"}
+      ],
+      "required": true,
+      "minSelected": 1
+    }
+  }
+}
