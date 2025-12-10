@@ -80,7 +80,7 @@ export default function About() {
               Empowering Learners to Achieve Their Dreams
             </h1>
             <p className="text-lg text-primary-foreground/80">
-              SkillBridge was founded with a simple mission: to make quality education
+              SKILLBRIDGE was founded with a simple mission: to make quality education
               accessible to everyone and help bridge the gap between learning and career success.
             </p>
           </div>
@@ -124,32 +124,14 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className="text-center animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      
 
       {/* Team */}
       <section className="py-16 lg:py-24 bg-background">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl font-display font-bold text-foreground mb-4">Our Team</h2>
-            <p className="text-muted-foreground">Meet the leaders shaping SkillBridge.</p>
+            <p className="text-muted-foreground">Meet the leaders shaping SKILLBRIDGE.</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -201,7 +183,7 @@ export default function About() {
               Our Core Values
             </h2>
             <p className="text-muted-foreground">
-              These values guide everything we do at SkillBridge.
+              These values guide everything we do at SKILLBRIDGE.
             </p>
           </div>
 
@@ -234,7 +216,7 @@ export default function About() {
             </h2>
             <div className="prose prose-lg max-w-none text-muted-foreground">
               <p>
-                SkillBridge was born from a simple observation: there was a significant gap
+                SKILLBRIDGE was born from a simple observation: there was a significant gap
                 between what traditional education offered and what the job market demanded.
                 Too many talented individuals were unable to access quality, practical education
                 that could help them advance their careers.
@@ -245,7 +227,7 @@ export default function About() {
                 from people who've actually worked in the field.
               </p>
               <p>
-                Today, SkillBridge serves thousands of learners worldwide, helping them master
+                Today, SKILLBRIDGE serves thousands of learners worldwide, helping them master
                 new skills, land their dream jobs, and build successful careers. But we're
                 just getting started. Our mission to democratize education continues, and
                 we're excited about the impact we can make together.
@@ -263,7 +245,7 @@ export default function About() {
               Ready to Start Your Journey?
             </h2>
             <p className="text-lg text-primary-foreground/80 mb-8">
-              Join thousands of learners who've transformed their careers with SkillBridge.
+              Join thousands of learners who've transformed their careers with SKILLBRIDGE.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/courses">

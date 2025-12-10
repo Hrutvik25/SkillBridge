@@ -96,7 +96,7 @@ export default function Auth() {
     } else {
       toast({
         title: "Account Created!",
-        description: "Welcome to SkillBridge. You're now signed in.",
+        description: "Welcome to SKILLBRIDGE. You're now signed in.",
       });
       navigate("/");
     }
@@ -113,7 +113,7 @@ export default function Auth() {
               <GraduationCap className="h-6 w-6 text-primary-foreground" />
             </div>
             <span className="text-xl font-bold text-foreground font-display">
-              SkillBridge
+              SKILLBRIDGE
             </span>
           </Link>
 

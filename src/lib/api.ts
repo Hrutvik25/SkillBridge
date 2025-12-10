@@ -79,9 +79,10 @@ export const coursesApi = {
     return apiRequest<Course[]>('/courses');
   },
 
-  getBySlug: async (slug: string) => {
+  getBySlug: async (slug: string, options?: RequestInit) => {
     return apiRequest<{ course: Course; mentors: Mentor[]; isEnrolled: boolean }>(
-      `/courses/${slug}`
+      `/courses/${slug}`,
+      options
     );
   },
 };

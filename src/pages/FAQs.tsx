@@ -4,44 +4,64 @@ import { Layout } from "@/components/layout/Layout";
 
 const faqs = [
   {
-    question: "What programs do you offer?",
-    answer: "We offer personalized programs for Students, Professionals, and Colleges/Institutions. Our domain-specific training covers IT/Computer Science, Cyber Security, Data Science & AI, Mechanical Engineering, Civil Engineering, Automobiles, Processes, Life Skills, and Green IT."
+    question: "What is Skill Bridge — Domain & Business Training?",
+    answer: "Skill Bridge is a domain-focused learning platform that teaches real-world business processes, tools, and workflows across industries (Banking, Capital Markets, Telecom, Cyber Security and Green IT etc). Our courses are designed to make learners job-ready with Business exposure and real industry knowledge."
   },
   {
-    question: "Who are the instructors?",
-    answer: "Our instructors are industry-experienced trainers and mentors with 15-30+ years of expertise in their respective domains. They bring real-world knowledge and practical insights to every session."
+    question: "How is Skill Bridge different from traditional education or generic online courses?",
+    answer: "We focus on domain capability (business workflows and applications) taught by industry practitioners. Instead of abstract theory, learners get industry exposure and opportunities and build a portfolio recruiters can evaluate."
   },
   {
-    question: "How long are the training programs?",
-    answer: "Program duration varies based on your needs. For students, we offer 1-month programs with 12 sessions (3 days a week). Professionals have flexible weekend batches, and colleges can customize the training duration according to their requirements."
+    question: "Who is Skill Bridge for?",
+    answer: "Students, freshers, and Working professionals looking to lateral moves, and mid-career professionals seeking domain upskilling or role-transition. We also aim to work directly with Educational Institutes and Colleges for specific programs."
   },
   {
-    question: "Are the classes online or offline?",
-    answer: "We offer both online and offline batches to suit your preferences and schedule. You can choose the format that works best for you during registration."
+    question: "What types of domain paths do you offer?",
+    answer: "Please check the Domain Page on our Website. We have a community of mentors which are from different industry backgrounds so please reach out to us in case you have specific requirements."
   },
   {
-    question: "What is your approach to learning?",
-    answer: "We follow a comprehensive approach: Free counseling with expert mentors, exploration of industries and career opportunities, and hands-on learning from industry experts to prepare you for real-world scenarios."
+    question: "How long does a domain path take to complete?",
+    answer: "Duration varies by path and level (Beginners → Intermediate → Advanced). Typical timelines range from a few weeks for short focused modules to 8–10 weeks for comprehensive job-ready tracks with projects."
   },
   {
-    question: "Do you provide placement assistance?",
-    answer: "Yes, we are committed to employability and career success. Our programs are designed to bridge the gap between academia and industry, enhancing your placement outcomes."
+    question: "Do you offer hands-on projects and real-world assignments?",
+    answer: "Yes. Many Courses includes real world assignments. Projects and Internships are additional services."
   },
   {
-    question: "Can I customize the training for my institution?",
-    answer: "Absolutely! We offer customized batches for colleges and institutions with flexible timings, curriculum customization, and bulk training options tailored to your specific needs."
+    question: "Will I get a certificate after completion?",
+    answer: "Yes. We issue a Skill Bridge Domain Capability Certificate upon successful completion of the course."
   },
   {
-    question: "What domains can I choose from?",
-    answer: "We offer expertise across multiple domains including Capital Markets, Banking, Insurance, Telecom, E-Commerce, Cyber Security, Data Science & AI, Civil Engineering, Mechanical Engineering, Automobiles, Green IT, and more."
+    question: "Do you provide job-placement support or interview help?",
+    answer: "Yes, we provide placement support, resume reviews, and mock interviews as complementary service but it does not offer a job guarantee."
   },
   {
-    question: "Is there post-training support?",
-    answer: "Yes, we provide supportive learning environment and post-training guidance to help you succeed in your career journey."
+    question: "Can I access course materials after finishing the path?",
+    answer: "Yes — enrolled learners have continued access to their course materials for specific duration."
   },
   {
-    question: "How do I enroll?",
-    answer: "You can start with a free counseling session with our expert mentors. Contact us at +91 87880 69300 or email Prasulabs@gmail.com to schedule your session and design your personalized roadmap to success."
+    question: "Are there any prerequisites or age restrictions?",
+    answer: "Most domain paths accept beginners as well as experienced professionals. Specific advanced modules may require foundational knowledge — prerequisites will be listed on each path page. There are no age restrictions."
+  },
+  {
+    question: "Is online learning self-paced or instructor-led?",
+    answer: "Its an instructor-led/cohort-based programs for guided learning and live interaction."
+  },
+  {
+    question: "Do you provide group or corporate training?",
+    answer: "Yes — We design custom domain training programs for corporates and Institutions. Contact us for additional details."
+  },
+  {
+    question: "How does Skill Bridge protect my data and privacy?",
+    answer: "We follow strict data-privacy practices and secure learner data. Our privacy policy (linked in the site footer) has full details on data handling and security measures."
+  },
+  {
+    question: "Do you offer internships or apprenticeships?",
+    answer: "We partner with industry for project-based apprenticeships and internship pipelines for select pro tracks. Availability depends on the program and partner needs."
+  },
+  {
+    question: "How can I contact support or request curriculum details?",
+    answer: "Refer to our Contact Page for details."
   }
 ];
 

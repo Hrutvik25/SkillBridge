@@ -1,5 +1,19 @@
+"use client";
+
+import React, { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { Zap } from "lucide-react";
+import { Zap, ChevronDown } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+
+/**
+ * Full Domain Expertise page with collapsible, animated domain cards.
+ * Drop this file in your pages/components (e.g., `app/domain-expertise/page.tsx` or `components/DomainExpertise.tsx`).
+ *
+ * Requirements:
+ *  - framer-motion
+ *  - lucide-react
+ *  - your project's Layout component and Tailwind CSS classes used below
+ */
 
 const domains = [
   {
@@ -99,6 +113,77 @@ const domains = [
   }
 ];
 
+function CollapsibleDomainCard({ domain }: { domain: typeof domains[0] }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="group bg-card rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-lg hover:border-primary/50 transition-all duration-300">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between p-6"
+        aria-expanded={open}
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-background">
+            {domain.domains?.[0]?.icon ?? "📚"}
+          </div>
+
+          <div className="text-left">
+            <h3 className="text-lg font-semibold text-primary">{domain.title}</h3>
+            <p className="text-xs text-muted-foreground mt-1 hidden md:block">
+              {domain.domains.slice(0, 3).map((d) => d.name).join(" • ")}
+            </p>
+          </div>
+        </div>
+
+        <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.25 }}>
+          <ChevronDown className="w-5 h-5 text-muted-foreground" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="panel"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.28 }}
+            className="px-6 pb-6"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+              {domain.domains.map((item, i) => (
+                <motion.div
+                  key={item.name + i}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2, delay: i * 0.03 }}
+                  className="flex items-center gap-3 p-3 rounded-lg bg-muted/20 border border-border"
+                >
+                  <div className="w-10 h-10 rounded-lg flex items-center justify-center text-xl">
+                    {item.icon}
+                  </div>
+                  <div className="text-sm font-medium text-foreground">{item.name}</div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="mt-4 flex gap-3 items-center">
+              <button className="px-4 py-2 rounded-full border border-primary/20 text-sm font-medium hover:bg-primary/5">
+                View Program
+              </button>
+              <button className="px-4 py-2 rounded-full border border-border text-sm font-medium hover:bg-muted/10">
+                Request Syllabus
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function DomainExpertise() {
   return (
     <Layout>
@@ -113,7 +198,7 @@ export default function DomainExpertise() {
               </h1>
             </div>
             <p className="text-lg text-primary-foreground/80">
-              Master industry-relevant skills across diverse domains. From IT and Cyber Security to Green IT and Engineering, 
+              Master industry-relevant skills across diverse domains. From IT and Cyber Security to Green IT and Engineering,
               we provide comprehensive training across multiple sectors.
             </p>
           </div>
@@ -125,30 +210,7 @@ export default function DomainExpertise() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {domains.map((domain, idx) => (
-              <div
-                key={idx}
-                className="group bg-card rounded-2xl border border-border overflow-hidden shadow-sm hover:shadow-lg hover:border-primary/50 transition-all duration-300"
-              >
-                <div className="h-full p-6">
-                  <h3 className="text-lg font-semibold text-primary mb-6">
-                    {domain.title}
-                  </h3>
-                  
-                  <div className="space-y-3">
-                    {domain.domains.map((item, itemIdx) => (
-                      <div
-                        key={itemIdx}
-                        className="flex items-center gap-3 p-3 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-                      >
-                        <span className="text-xl flex-shrink-0">{item.icon}</span>
-                        <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
-                          {item.name}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <CollapsibleDomainCard key={idx} domain={domain} />
             ))}
           </div>
 
@@ -160,7 +222,7 @@ export default function DomainExpertise() {
             <p className="text-muted-foreground mb-6">
               Personalized programs for Students, Professionals & Institutions—crafted for clarity, confidence, and career success.
             </p>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
               <div className="bg-card rounded-lg p-6 border border-border">
                 <h3 className="text-lg font-semibold text-foreground mb-3">For Students</h3>
@@ -168,14 +230,14 @@ export default function DomainExpertise() {
                   Turn your degree into a career advantage with domain-specific training that builds confidence and prepares you for the real world.
                 </p>
               </div>
-              
+
               <div className="bg-card rounded-lg p-6 border border-border">
                 <h3 className="text-lg font-semibold text-foreground mb-3">For Professionals</h3>
                 <p className="text-sm text-muted-foreground">
                   Stay ahead with targeted upskilling. Whether switching roles or accelerating growth, gain practical and industry-aligned expertise.
                 </p>
               </div>
-              
+
               <div className="bg-card rounded-lg p-6 border border-border">
                 <h3 className="text-lg font-semibold text-foreground mb-3">For Colleges & Institutions</h3>
                 <p className="text-sm text-muted-foreground">

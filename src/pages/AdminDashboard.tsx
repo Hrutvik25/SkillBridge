@@ -234,7 +234,18 @@ export default function AdminDashboard() {
 
   async function toggleMentorVisibility(id: string, currentActive: boolean) {
     try {
-      await adminApi.updateMentor(id, { active: !currentActive });
+      // Find the mentor in the current list to preserve all data
+      const mentor = mentors.find(m => m._id === id);
+      if (mentor) {
+        // Send all mentor data to preserve image_url and linkedin fields
+        await adminApi.updateMentor(id, { 
+          ...mentor,
+          active: !currentActive 
+        });
+      } else {
+        // Fallback to just updating active status
+        await adminApi.updateMentor(id, { active: !currentActive });
+      }
       toast({ title: !currentActive ? "Mentor is now visible" : "Mentor is now hidden" });
       fetchData();
     } catch (error) {
@@ -286,7 +297,18 @@ export default function AdminDashboard() {
 
   async function toggleTeamVisibility(id: string, active: boolean) {
     try {
-      await adminApi.updateTeamMember(id, { active: !active });
+      // Find the team member in the current list to preserve all data
+      const member = teamMembers.find(m => m._id === id);
+      if (member) {
+        // Send all team member data to preserve image_url and linkedin fields
+        await adminApi.updateTeamMember(id, { 
+          ...member,
+          active: !active 
+        });
+      } else {
+        // Fallback to just updating active status
+        await adminApi.updateTeamMember(id, { active: !active });
+      }
       toast({ title: !active ? "Member is now visible" : "Member hidden" });
       fetchData();
     } catch (error) {
@@ -316,7 +338,18 @@ export default function AdminDashboard() {
 
   async function toggleCourseVisibility(id: string, published: boolean) {
     try {
-      await adminApi.updateCourse(id, { published: !published });
+      // Find the course in the current list to preserve all data
+      const course = courses.find(c => c._id === id);
+      if (course) {
+        // Send all course data to preserve fields
+        await adminApi.updateCourse(id, { 
+          ...course,
+          published: !published 
+        });
+      } else {
+        // Fallback to just updating published status
+        await adminApi.updateCourse(id, { published: !published });
+      }
       toast({ title: !published ? "Course is now visible" : "Course hidden" });
       fetchData();
     } catch (error) {
@@ -566,7 +599,7 @@ export default function AdminDashboard() {
                       <td className="p-3 font-medium">{c.course_name || c.title}</td>
                       <td className="p-3 text-muted-foreground">{c.date || "-"}</td>
                       <td className="p-3 text-muted-foreground">{c.mode?.join(", ") || "-"}</td>
-                      <td className="p-3 text-muted-foreground">{c.price ? `$${c.price}` : "Free"}</td>
+                      <td className="p-3 text-muted-foreground">{c.price ? `₹${c.price}` : "Free"}</td>
                       <td className="p-3 text-muted-foreground">
                         <span className={`px-2 py-1 rounded text-xs ${c.published ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>
                           {c.published ? "Visible" : "Hidden"}

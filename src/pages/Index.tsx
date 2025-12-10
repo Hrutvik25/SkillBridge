@@ -292,12 +292,11 @@ export default function Index() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-6 animate-fade-in-up">
-              Bridge the Gap Between
-              <span className="block text-accent">Learning & Career Success</span>
+              Empowering Careers,
+              <span className="block text-accent">Elevating Institutions. </span>
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-              Master in-demand skills with expert mentors and hands-on projects.
-              Join thousands of learners who've transformed their careers.
+             Your bridge to domain coaching, skilled-development, and hiring for students and educational partners.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
               <Link to="/courses">
@@ -321,7 +320,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <h2 className="text-3xl lg:text-4xl font-display font-bold text-foreground mb-4">
-              Why Choose SkillBridge?
+              Why Choose SKILLBRIDGE?
             </h2>
             <p className="text-muted-foreground">
               We're not just another online learning platform. We're your partner in career transformation.
@@ -469,11 +468,13 @@ export default function Index() {
 
           <div className="max-w-3xl mx-auto space-y-4 mb-8">
             {[
-              { q: "What programs do you offer?", a: "We offer domain-specific training for Students, Professionals, and Colleges across multiple sectors like IT, Cyber Security, Data Science, and more." },
-              { q: "How long are the programs?", a: "Program duration varies. Students get 1-month programs with 12 sessions, while professionals have flexible weekend batches. Colleges can customize the duration." },
-              { q: "Are classes online or offline?", a: "We offer both online and offline batches. You can choose the format that works best for you during registration." },
-              { q: "Do you provide placement assistance?", a: "Yes, we're committed to employability and career success. Our programs are designed to enhance placement outcomes." },
-              { q: "How do I get started?", a: "Contact us for a free counseling session with our expert mentors. They'll help design your personalized learning roadmap." },
+              
+             
+              { q: "How is Skill Bridge different from traditional education or generic online courses?", a: "We focus on domain capability (business workflows and applications) taught by industry practitioners. Instead of abstract theory, learners get industry exposure and opportunities and build a portfolio recruiters can evaluate." },
+              { q: "Who is Skill Bridge for?", a: "Students, freshers, and Working professionals looking to lateral moves, and mid-career professionals seeking domain upskilling or role-transition. We also aim to work directly with Educational Institutes and Colleges for specific programs." },
+              { q: "What types of domain paths do you offer?", a: "Please check the Domain Page on our Website. We have a community of mentors which are from different industry backgrounds so please reach out to us in case you have specific requirements." },
+              { q: "How long does a domain path take to complete?", a: "Duration varies by path and level (Beginners → Intermediate → Advanced). Typical timelines range from a few weeks for short focused modules to 8–10 weeks for comprehensive job-ready tracks with projects." },
+              
             ].map((item, idx) => (
               <div key={idx} className="bg-card rounded-lg border border-border overflow-hidden hover:border-primary/50 transition-colors">
                 <button onClick={() => setOpenFAQIndex(openFAQIndex === idx ? null : idx)} className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-muted/50 transition-colors">
@@ -506,7 +507,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl lg:text-4xl font-display font-bold text-primary-foreground mb-4">Ready to Start Your Journey?</h2>
-            <p className="text-lg text-primary-foreground/80 mb-8">Join thousands of learners who've transformed their careers with SkillBridge. Your next opportunity awaits.</p>
+            <p className="text-lg text-primary-foreground/80 mb-8">Join thousands of learners who've transformed their careers with SKILLBRIDGE. Your next opportunity awaits.</p>
             <Link to="/auth?mode=register">
               <Button variant="hero" size="xl">
                 Get Started Free

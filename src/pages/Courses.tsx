@@ -29,7 +29,7 @@ export default function Courses() {
         });
         setAllTags(Array.from(tags));
       } catch (error) {
-        console.error('Failed to fetch courses:', error);
+        console.error("Failed to fetch courses:", error);
       }
       setLoading(false);
     }
@@ -126,14 +126,14 @@ export default function Courses() {
         </div>
       </section>
 
-      {/* Course Grid */}
+      {/* Course Grid (now a responsive wrap layout) */}
       <section className="py-12 lg:py-16 bg-background">
         <div className="container mx-auto px-4">
           {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="flex flex-wrap gap-6">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse">
-                  <div className="aspect-video bg-muted rounded-lg mb-4" />
+                <div key={i} className="bg-card rounded-xl border border-border p-5 animate-pulse" style={{ minWidth: 280, maxWidth: 420 }}>
+                  <div className="w-full h-40 bg-muted rounded-lg mb-4" />
                   <div className="h-4 bg-muted rounded w-3/4 mb-2" />
                   <div className="h-3 bg-muted rounded w-full mb-4" />
                   <div className="h-10 bg-muted rounded" />
@@ -145,7 +145,9 @@ export default function Courses() {
               <p className="text-sm text-muted-foreground mb-6">
                 Showing {filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""}
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {/* layout uses flex-wrap so cards with different widths fit naturally */}
+              <div className="flex flex-wrap gap-6">
                 {filteredCourses.map((course, index) => (
                   <div
                     key={course._id}
@@ -161,6 +163,8 @@ export default function Courses() {
                       price={course.price ? Number(course.price) : null}
                       durationWeeks={course.duration_weeks}
                       tags={course.tags}
+                      // optional: pass a desired max display width (px)
+                      maxDisplayWidth={420}
                     />
                   </div>
                 ))}
@@ -181,14 +185,14 @@ export default function Courses() {
         </div>
       </section>
 
-      {/* Our Approach */}
+      {/* Our Approach & Why Choose Us (unchanged) */}
       <section className="py-16 lg:py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="mt-12 max-w-5xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-10 text-center">
               Our Learning Approach
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 rounded-lg p-7 border border-blue-200 dark:border-blue-800">
                 <div className="text-4xl mb-4">🎓</div>
@@ -216,10 +220,9 @@ export default function Courses() {
             </div>
           </div>
 
-          {/* Why Choose Us */}
           <div className="mt-16 max-w-5xl mx-auto bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-8 border border-primary/20">
             <h2 className="text-3xl font-display font-bold text-foreground mb-7">
-              Why Choose SkillBridge?
+              Why Choose SKILLBRIDGE?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div className="flex items-start gap-4">

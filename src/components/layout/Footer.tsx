@@ -40,10 +40,10 @@ export function Footer() {
                 alt="SkillBridge Hub Logo" 
                 className="h-10 w-10 rounded-lg object-cover"
               />
-              <span className="text-xl font-bold font-display">SkillBridge</span>
+              <span className="text-xl font-bold font-display">SKILLBRIDGE</span>
             </Link>
             <p className="text-sm text-background/70 mb-6 leading-relaxed">
-              Skill Bridge, Product of PRASU Soft Lab, is a domain-driven platform that connects education with industry. 
+              SKILLBRIDGE, Product of PRASU Soft Lab, is a domain-driven platform that connects education with industry. 
               Through modular coaching and precision hiring tools, we empower students, institutions, and companies to achieve real-world impact.
             </p>
             <div className="space-y-2 text-sm text-background/70">
@@ -116,36 +116,36 @@ export function Footer() {
                   </a>
                 </li>
               </ul>
+              
+              {/* Map moved here and made smaller */}
+              <div className="mt-6">
+                <h3 className="text-sm font-semibold mb-2">Find Us</h3>
+                <div className="rounded-lg overflow-hidden border border-background/10 shadow-md bg-background">
+                  <iframe
+                    title="SKILLBRIDGE Location"
+                    src="https://www.google.com/maps?q=A%20702%2C%20Ruturang%20Society%20Phase%201%2C%20Aranyeshwar%20Road%2C%20Pune%20411009&output=embed"
+                    width="100%"
+                    height="150"
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  />
+                  <a
+                    href="https://maps.app.goo.gl/ZzeekqhX6yngLvsFA"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block text-xs text-background/70 hover:text-accent px-2 py-1"
+                  >
+                    Open in Google Maps
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Map */}
-        <div className="mt-10">
-          <h3 className="text-sm font-semibold mb-4">Find Us</h3>
-          <div className="rounded-xl overflow-hidden border border-background/10 shadow-lg bg-background">
-            <iframe
-              title="SkillBridge Location"
-              src="https://www.google.com/maps?q=A%20702%2C%20Ruturang%20Society%20Phase%201%2C%20Aranyeshwar%20Road%2C%20Pune%20411009&output=embed"
-              width="100%"
-              height="260"
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
-            <a
-              href="https://maps.app.goo.gl/ZzeekqhX6yngLvsFA"
-              target="_blank"
-              rel="noreferrer"
-              className="block text-xs text-background/70 hover:text-accent px-4 py-2"
-            >
-              Open in Google Maps
-            </a>
-          </div>
-        </div>
-
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-8 pt-6 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/60">
             Copyright © {new Date().getFullYear()} PRASU Soft Lab Pvt. Ltd.
           </p>

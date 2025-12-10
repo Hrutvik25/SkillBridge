@@ -41,7 +41,7 @@ export function Header() {
             className="h-10 w-10 rounded-lg object-cover"
           />
           <span className="text-xl font-bold text-foreground font-display">
-            SkillBridge
+            SKILLBRIDGE
           </span>
         </Link>
 
