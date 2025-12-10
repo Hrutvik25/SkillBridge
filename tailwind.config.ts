@@ -16,7 +16,7 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
-        display: ["Playfair Display", "Georgia", "serif"],
+        display: ["var(--font-display)", "Poppins", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
