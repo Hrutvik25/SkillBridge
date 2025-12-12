@@ -237,6 +237,11 @@ export const adminApi = {
       method: 'DELETE',
     });
   },
+  
+  // Get all enrollments with user and course details
+  getEnrollments: async () => {
+    return apiRequest<EnrollmentDetails[]>('/admin/enrollments');
+  },
 };
 
 // Types
@@ -294,6 +299,23 @@ export interface Enrollment {
     slug: string;
     image_url: string | null;
     short_description: string | null;
+  };
+}
+
+// New interface for admin enrollment details
+export interface EnrollmentDetails {
+  id: string;
+  enrolled_at: string;
+  user: {
+    id: string;
+    full_name: string | null;
+    email: string;
+    created_at: string;
+  };
+  course: {
+    id: string;
+    course_name: string;
+    slug: string;
   };
 }
 

@@ -2,6 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import { authenticate } from '../middleware/auth.js';
+import { sendWelcomeEmail } from '../services/emailService.js';
 
 const router = express.Router();
 
@@ -30,6 +31,14 @@ router.post('/register', async (req, res) => {
     });
 
     await user.save();
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail(user);
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError);
+      // Don't fail the registration if email sending fails
+    }
 
     // Generate token
     const token = generateToken(user._id);

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { adminApi, Course, Mentor, AdminStats, TeamMember } from "@/lib/api";
+import { adminApi, Course, Mentor, AdminStats, TeamMember, EnrollmentDetails } from "@/lib/api";
 import { AdminCoursePayload, CourseFormState, MentorAvailability } from "@/lib/types";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -18,10 +18,12 @@ export default function AdminDashboard() {
   const [mentors, setMentors] = useState<Mentor[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+  const [enrollments, setEnrollments] = useState<EnrollmentDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [courseDialogOpen, setCourseDialogOpen] = useState(false);
   const [teamDialogOpen, setTeamDialogOpen] = useState(false);
+  const [enrollmentsLoading, setEnrollmentsLoading] = useState(false);
   const { toast } = useToast();
 
   // Form states
@@ -58,6 +60,19 @@ export default function AdminDashboard() {
       console.error('Failed to fetch admin data:', error);
     }
     setLoading(false);
+  }
+
+  async function fetchEnrollments() {
+    try {
+      setEnrollmentsLoading(true);
+      const data = await adminApi.getEnrollments();
+      setEnrollments(data);
+    } catch (error) {
+      console.error('Failed to fetch enrollments:', error);
+      toast({ title: "Error", description: "Failed to fetch enrollments", variant: "destructive" });
+    } finally {
+      setEnrollmentsLoading(false);
+    }
   }
 
   async function addMentor() {
@@ -403,11 +418,16 @@ export default function AdminDashboard() {
         </div>
 
         {/* Tabs */}
-        <Tabs defaultValue="mentors">
+        <Tabs defaultValue="mentors" onValueChange={(value) => {
+          if (value === "enrollments" && enrollments.length === 0) {
+            fetchEnrollments();
+          }
+        }}>
           <TabsList>
             <TabsTrigger value="mentors">Mentors</TabsTrigger>
             <TabsTrigger value="courses">Courses</TabsTrigger>
             <TabsTrigger value="team">Our Team</TabsTrigger>
+            <TabsTrigger value="enrollments">Enrollments</TabsTrigger>
           </TabsList>
 
           <TabsContent value="mentors" className="mt-6">
@@ -659,6 +679,60 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                   {teamMembers.length === 0 && <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">No team members yet</td></tr>}
+                </tbody>
+              </table>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="enrollments" className="mt-6">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold">Student Enrollments</h2>
+              <Button size="sm" onClick={fetchEnrollments} disabled={enrollmentsLoading}>
+                {enrollmentsLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                    Loading...
+                  </>
+                ) : (
+                  "Refresh"
+                )}
+              </Button>
+            </div>
+            
+            <div className="bg-card rounded-xl border border-border overflow-hidden">
+              <table className="w-full text-sm">
+                <thead className="bg-muted">
+                  <tr>
+                    <th className="text-left p-3">Student</th>
+                    <th className="text-left p-3">Email</th>
+                    <th className="text-left p-3">Course</th>
+                    <th className="text-left p-3">Enrollment Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {enrollments.map((enrollment) => (
+                    <tr key={enrollment.id} className="border-t border-border">
+                      <td className="p-3 font-medium">
+                        {enrollment.user.full_name || "Unnamed Student"}
+                      </td>
+                      <td className="p-3 text-muted-foreground">{enrollment.user.email}</td>
+                      <td className="p-3">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                          {enrollment.course.course_name}
+                        </span>
+                      </td>
+                      <td className="p-3 text-muted-foreground">
+                        {new Date(enrollment.enrolled_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                  {enrollments.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="p-8 text-center text-muted-foreground">
+                        {enrollmentsLoading ? "Loading enrollments..." : "No enrollments found"}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

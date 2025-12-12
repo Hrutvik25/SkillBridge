@@ -1,7 +1,9 @@
 import express from 'express';
 import Enrollment from '../models/Enrollment.js';
 import Course from '../models/Course.js';
+import User from '../models/User.js';
 import { authenticate } from '../middleware/auth.js';
+import { sendEnrollmentConfirmationEmail } from '../services/emailService.js';
 
 const router = express.Router();
 
@@ -67,6 +69,17 @@ router.post('/', authenticate, async (req, res) => {
         });
 
         await enrollment.save();
+
+        // Get user details for email
+        const user = await User.findById(req.user._id);
+        
+        // Send enrollment confirmation email
+        try {
+            await sendEnrollmentConfirmationEmail(user, course);
+        } catch (emailError) {
+            console.error('Failed to send enrollment confirmation email:', emailError);
+            // Don't fail the enrollment if email sending fails
+        }
 
         res.status(201).json({
             id: enrollment._id,

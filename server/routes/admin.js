@@ -348,4 +348,52 @@ router.delete('/courses/:id', authenticate, requireAdmin, async (req, res) => {
   }
 });
 
+// Get enrolled users with course details
+router.get('/enrollments', authenticate, requireAdmin, async (req, res) => {
+  try {
+    // Get all enrollments with populated user and course details
+    const enrollments = await Enrollment.find()
+      .populate({
+        path: 'user_id',
+        select: 'full_name email created_at'
+      })
+      .populate({
+        path: 'course_id',
+        select: 'course_name slug'
+      })
+      .sort({ enrolled_at: -1 });
+
+    // Format the response with proper error handling
+    const formattedEnrollments = enrollments.map(enrollment => {
+      // Handle case where user or course might not be found
+      const user = enrollment.user_id || {};
+      const course = enrollment.course_id || {};
+      
+      return {
+        id: enrollment._id,
+        enrolled_at: enrollment.enrolled_at,
+        user: {
+          id: user._id || null,
+          full_name: user.full_name || null,
+          email: user.email || null,
+          created_at: user.created_at || null
+        },
+        course: {
+          id: course._id || null,
+          course_name: course.course_name || "Unknown Course",
+          slug: course.slug || null
+        }
+      };
+    }).filter(enrollment => 
+      // Filter out enrollments where both user and course are missing
+      enrollment.user.id !== null || enrollment.course.id !== null
+    );
+
+    res.json(formattedEnrollments);
+  } catch (error) {
+    console.error('Get enrollments error:', error);
+    res.status(500).json({ error: 'Failed to fetch enrollments' });
+  }
+});
+
 export default router;

@@ -50,6 +50,24 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
+## Environment Variables Setup
+
+To run this project properly, you need to set up environment variables:
+
+1. Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Update the `.env` file with your actual values:
+   - SendGrid API key
+   - SendGrid sender email and name
+   - JWT secret
+   - MongoDB URI
+   - Port number
+
+**Important**: Never commit your `.env` file to version control. It's already included in `.gitignore`.
+
 ## What technologies are used for this project?
 
 This project is built with:
