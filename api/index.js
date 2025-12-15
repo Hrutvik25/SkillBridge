@@ -1,5 +1,5 @@
 import serverless from 'serverless-http';
-import app, { connectDB } from '../server/app.js';
+import app, { connectDB } from '../backend/server/app.js';
 
 let connected = false;
 const handler = serverless(app);
