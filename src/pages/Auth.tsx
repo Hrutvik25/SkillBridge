@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { GraduationCap, Loader2, Mail, Lock, User } from "lucide-react";
+import { Loader2, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -108,10 +108,12 @@ export default function Auth() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 mb-8">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-hero">
-              <GraduationCap className="h-6 w-6 text-primary-foreground" />
-            </div>
+          <Link to="/" className="flex items-center gap-3 mb-8">
+            <img
+              src="/images/Skill-Bridge-Logo.jpg"
+              alt="SKILLBRIDGE"
+              className="h-10 w-10 object-contain rounded-md"
+            />
             <span className="text-xl font-bold text-foreground font-display">
               SKILLBRIDGE
             </span>
@@ -302,7 +304,11 @@ export default function Auth() {
         <div className="text-center text-primary-foreground">
           <div className="mb-8">
             <div className="w-24 h-24 mx-auto rounded-2xl bg-primary-foreground/10 flex items-center justify-center backdrop-blur-sm">
-              <GraduationCap className="h-12 w-12" />
+              <img
+                src="/images/Skill-Bridge-Logo.jpg"
+                alt="SKILLBRIDGE"
+                className="h-16 w-16 object-contain"
+              />
             </div>
           </div>
           <h2 className="text-3xl font-display font-bold mb-4">
