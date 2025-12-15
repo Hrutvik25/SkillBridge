@@ -1,16 +1,20 @@
 {
-  "name": "skillbridge",
+  "name": "skillbridge-monorepo",
   "private": true,
-  "type": "module",
+  "workspaces": [
+    "apps/*"
+  ],
   "engines": {
     "node": "20.x"
   },
   "scripts": {
-    "start": "node server.js",
-    "vercel-build": "npm install --prefix backend/server && echo 'Deployment successful'"
+    "dev": "concurrently \"npm run dev --workspace=apps/frontend\" \"npm run dev --workspace=apps/backend\"",
+    "build": "npm run build --workspace=apps/frontend",
+    "start": "npm start --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "dev:backend": "npm run dev --workspace=apps/backend"
   },
-  "dependencies": {
-    "@vercel/node": "^3.2.29",
-    "serverless-http": "^3.0.0"
+  "devDependencies": {
+    "concurrently": "^8.0.0"
   }
 }

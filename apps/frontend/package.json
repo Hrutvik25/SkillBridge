@@ -1,5 +1,5 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "skillbridge-frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,15 +8,13 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "postinstall": "npm --prefix server install",
-    "vercel-build": "npm --prefix server install"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.0.0",
     "@fontsource/inter": "^5.0.0",
     "@fontsource/manrope": "^5.0.0",
-    "@fontsource/playfair-display": "^5.2.8",
+    "@fontsource/playfair-display": "^5.0.0",
     "@fontsource/poppins": "^5.2.7",
     "@hookform/resolvers": "^3.10.0",
     "@radix-ui/react-accordion": "^1.2.11",

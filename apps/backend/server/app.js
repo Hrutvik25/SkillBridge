@@ -22,7 +22,13 @@ dotenv.config();
 
 const app = express();
 
-// Configure CORS for Vercel deployment
+// Add request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
+// Configure CORS
 app.use(cors({
   origin: [
     'http://localhost:5173', 

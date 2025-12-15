@@ -1,13 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "api/health.js", "use": "@vercel/node" },
-    { "src": "api/handler.js", "use": "@vercel/node" }
+    { "src": "apps/frontend/dist/**/*", "use": "@vercel/static" },
+    { "src": "apps/backend/server/api/health.js", "use": "@vercel/node" },
+    { "src": "apps/backend/server/api/handler.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/health", "dest": "/api/health.js" },
-    { "src": "/api/(.*)", "dest": "/api/handler.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
+    { "src": "/api/health", "dest": "/apps/backend/server/api/health.js" },
+    { "src": "/api/(.*)", "dest": "/apps/backend/server/api/handler.js" },
+    { "src": "/(.*)", "dest": "/apps/frontend/dist/index.html" }
   ]
 }
