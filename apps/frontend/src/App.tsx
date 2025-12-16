@@ -15,6 +15,7 @@ import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import Gallery from "./pages/Gallery";
+import Institutions from "./pages/Institutions";
 import NotFound from "./pages/NotFound";
 import FAQs from "./pages/FAQs";
 import Domains from "./pages/Domains";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/courses/:slug" element={<CourseDetail />} />
             <Route path="/mentors" element={<Mentors />} />
             <Route path="/gallery" element={<Gallery />} />
+            <Route path="/institutions" element={<Institutions />} />
             <Route path="/domains" element={<Domains />} />
             <Route path="/faqs" element={<FAQs />} />
             <Route path="/about" element={<About />} />

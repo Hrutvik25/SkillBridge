@@ -53,7 +53,7 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <a href="mailto:Prasulabs@gmail.com" className="hover:text-accent transition-colors">Prasulabs@gmail.com</a>
+                <a href="mailto:prasulabs@gmail.com" className="hover:text-accent transition-colors">prasulabs@gmail.com</a>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
@@ -108,11 +108,11 @@ export function Footer() {
                 </li>
                 <li>
                   <a
-                    href="mailto:Prasulabs@gmail.com"
+                    href="mailto:prasulabs@gmail.com"
                     className="text-sm text-background/70 hover:text-accent transition-colors flex items-center gap-2"
                   >
                     <Mail className="h-4 w-4" />
-                    Prasulabs@gmail.com
+                    prasulabs@gmail.com
                   </a>
                 </li>
               </ul>
