@@ -14,10 +14,11 @@ export default function InstagramFeed() {
   return (
     <div className="w-full overflow-hidden rounded-xl shadow-md bg-background">
       <iframe
-        src="https://lightwidget.com/widgets/6fc67deb8d0b5c9e997d87b0446d5c90.html"
-        className="lightwidget-widget w-full border-0"
+        src="//lightwidget.com/widgets/57aa15151cb354e787e5c29c84770f1d.html"
+        className="lightwidget-widget"
         scrolling="no"
-        style={{ height: "520px" }}
+        allowTransparency={true}
+        style={{ width: '100%', border: 0, overflow: 'hidden', height: '520px' }}
         title="Instagram Feed"
       />
     </div>
