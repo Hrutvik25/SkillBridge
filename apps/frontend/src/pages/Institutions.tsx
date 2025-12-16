@@ -1,33 +1,47 @@
-import React from 'react';
-import { Layout } from '@/components/layout/Layout';
+import React from "react";
+import { Layout } from "@/components/layout/Layout";
 
 export default function Institutions() {
   return (
     <Layout>
+      {/* HERO SECTION (left-aligned with animation) */}
       <section className="bg-gradient-hero pt-16 pb-24 lg:pt-20 lg:pb-32">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl lg:text-4xl font-display font-bold text-primary-foreground mb-3">
-              For Institutions
+          <div className="max-w-xl">
+            <h1 className="text-2xl md:text-2xl lg:text-3xl font-display font-bold text-primary-foreground mb-3 animate-fade-in-up leading-tight">
+              <span className="block whitespace-nowrap">Structured, accreditation-aligned industry engagement models</span>
+              <span className="block whitespace-nowrap">that enhance curriculum relevance, employability, and workforce readiness.</span>
             </h1>
-            <p className="text-lg text-primary-foreground/80 mb-6">
-              Structured, accreditation-aligned industry engagement models that enhance curriculum relevance, employability, and workforce readiness.
-            </p>
-            <div className="flex gap-4">
-              <a href="#contact" className="inline-block px-6 py-3 bg-primary text-white rounded-md font-semibold">Partner with SKILLBRIDGE</a>
-              <a href="#" className="inline-block px-6 py-3 bg-slate-600 text-white rounded-md font-semibold">Download Institutional Brochure</a>
+
+            <div className="flex flex-wrap gap-4 mt-4 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              <a
+                href="#contact"
+                className="inline-block px-6 py-3 bg-primary text-white rounded-md font-semibold"
+              >
+                Partner with SKILLBRIDGE
+              </a>
+              <a
+                href="#"
+                className="inline-block px-6 py-3 bg-slate-600 text-white rounded-md font-semibold"
+              >
+                Download Institutional Brochure
+              </a>
             </div>
           </div>
         </div>
       </section>
 
+      {/* GAP SECTION */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">The Gap Institutions Face Today</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            The Challenges Institutions Face Today
+          </h2>
           <p className="mb-4 text-slate-700">
-            While institutions deliver strong academic foundations, many students graduate without
-            sufficient exposure to real-world industry environments. This gap limits their ability
-            to apply knowledge in practical settings and impacts employability outcomes.
+            While institutions deliver strong academic foundations, many students
+            graduate without sufficient exposure to real-world industry
+            environments. This gap limits their ability to apply knowledge in
+            practical settings and impacts employability outcomes.
           </p>
           <ul className="list-disc pl-6 space-y-2 text-slate-700">
             <li>Limited exposure to real industry workflows</li>
@@ -38,12 +52,19 @@ export default function Institutions() {
         </div>
       </section>
 
+      {/* MODEL SECTION */}
       <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-6">The SKILLBRIDGE Integrated Industry–Academia Model</h2>
-          <p className="mb-8 text-slate-700">SKILLBRIDGE enables institutions to embed industry intelligence into curriculum delivery through a structured, outcome-driven, and accreditation-aligned approach.</p>
+          <h2 className="text-2xl font-semibold mb-6">
+            The SKILLBRIDGE Integrated Industry–Academia Model
+          </h2>
+          <p className="mb-8 text-slate-700">
+            SKILLBRIDGE enables institutions to embed industry intelligence into
+            curriculum delivery through a structured, outcome-driven, and
+            accreditation-aligned approach.
+          </p>
 
-          <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-3">
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h3 className="text-lg font-semibold mb-3">SKILLBRIDGE Flux</h3>
               <ul className="list-disc pl-5 text-slate-700 space-y-2">
@@ -56,7 +77,9 @@ export default function Institutions() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3">Long-Term Collaboration</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                Long-Term Collaboration
+              </h3>
               <ul className="list-disc pl-5 text-slate-700 space-y-2">
                 <li>Monthly domain sessions (2–3 hours)</li>
                 <li>Continuous industry exposure</li>
@@ -67,7 +90,9 @@ export default function Institutions() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-3">Embedded Curriculum</h3>
+              <h3 className="text-lg font-semibold mb-3">
+                Embedded Curriculum
+              </h3>
               <ul className="list-disc pl-5 text-slate-700 space-y-2">
                 <li>Value Added Courses (VAC / SEC)</li>
                 <li>Credit-linked industry courses</li>
@@ -80,9 +105,12 @@ export default function Institutions() {
         </div>
       </section>
 
+      {/* OUTCOMES */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-6">What Institutions Achieve</h2>
+          <h2 className="text-2xl font-semibold mb-6">
+            What Institutions Achieve
+          </h2>
           <div className="grid gap-8 md:grid-cols-3">
             <div>
               <h3 className="font-semibold mb-2">Student Outcomes</h3>
@@ -114,9 +142,12 @@ export default function Institutions() {
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50" id="alignment">
+      {/* ALIGNMENT */}
+      <section className="py-16 bg-slate-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">Aligned with NEP 2020 & NAAC</h2>
+          <h2 className="text-2xl font-semibold mb-4">
+            Aligned with NEP 2020 & NAAC
+          </h2>
           <ul className="list-disc pl-5 text-slate-700 space-y-2">
             <li>NEP 2020 – Experiential & skill-based learning</li>
             <li>NAAC Criterion I – Curriculum Enrichment</li>
@@ -127,31 +158,19 @@ export default function Institutions() {
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">Institutional Impact</h2>
-          <p className="text-slate-700 mb-4">SKILLBRIDGE goes beyond short-term training or isolated events. It represents a strategic approach to embedding industry relevance into academic learning—helping institutions produce graduates who are academically strong and professionally ready.</p>
-          <strong>Academically grounded. Professionally prepared.</strong>
-        </div>
-      </section>
-
+      {/* CTA */}
       <section className="py-16 bg-primary text-white" id="contact">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-semibold mb-4">Build an Industry-Integrated Learning Ecosystem</h2>
-          <p className="mb-6">Connect with SKILLBRIDGE to explore a partnership tailored to your institution.</p>
+          <h2 className="text-2xl font-semibold mb-4">
+            Build an Industry-Integrated Learning Ecosystem
+          </h2>
+          <p className="mb-6">
+            Connect with SKILLBRIDGE to explore a partnership tailored to your
+            institution.
+          </p>
           <a
-            href="mailto:prasulabs@gmail.com?subject=Partnership%20Discussion&body=Hello%20SKILLBRIDGE%20team%2C%0A%0AI%20am%20interested%20in%20discussing%20an%20institutional%20partnership.%0A%0ARegards%2C%0A"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="mailto:prasulabs@gmail.com"
             className="inline-block px-6 py-3 bg-white text-primary rounded-md font-semibold"
-            onClick={(e) => {
-              // fallback to ensure mailto is opened even if browser blocks default anchor behavior
-              try {
-                window.location.href = 'mailto:prasulabs@gmail.com?subject=Partnership%20Discussion&body=Hello%20SKILLBRIDGE%20team%2C%0A%0AI%20am%20interested%20in%20discussing%20an%20institutional%20partnership.%0A%0ARegards%2C%0A';
-              } catch (err) {
-                // no-op
-              }
-            }}
           >
             Request a Partnership Discussion
           </a>
