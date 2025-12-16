@@ -13,10 +13,11 @@ import {
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Courses", href: "/courses" },
-  { name: "Mentors", href: "/mentors" },
-  { name: "Gallery", href: "/gallery" },
   { name: "Domains", href: "/domains" },
+  { name: "Mentors", href: "/mentors" },
+  { name: "For Institutions", href: "/institutions" },
+  { name: "For Individuals", href: "/courses" },
+  { name: "Gallery", href: "/gallery" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
 ];
