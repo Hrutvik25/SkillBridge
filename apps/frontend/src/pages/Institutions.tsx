@@ -169,7 +169,7 @@ export default function Institutions() {
             institution.
           </p>
           <a
-            href="mailto:prasulabs@gmail.com"
+            href="/contact"
             className="inline-block px-6 py-3 bg-white text-primary rounded-md font-semibold"
           >
             Request a Partnership Discussion
