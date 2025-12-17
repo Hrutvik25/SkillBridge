@@ -158,6 +158,7 @@ function CollapsibleDomainCard({
               ))}
             </div>
 
+            {/*
             <div className="mt-4 flex gap-3">
               <button className="px-4 py-2 rounded-full border text-sm">
                 View Program
@@ -166,6 +167,7 @@ function CollapsibleDomainCard({
                 Request Syllabus
               </button>
             </div>
+            */}
           </motion.div>
         )}
       </AnimatePresence>

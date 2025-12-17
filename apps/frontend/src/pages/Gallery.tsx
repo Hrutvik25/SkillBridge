@@ -20,7 +20,7 @@ export default function Gallery() {
   async function fetchGallery() {
     try {
       const data = await galleryApi.getAll();
-      const mapped = data.map((d: any, i: number) => ({
+      const mapped = (data as any[]).map((d: any, i: number) => ({
         id: i,
         src: d.image_url.startsWith('http') ? d.image_url : d.image_url,
         href: '#',
