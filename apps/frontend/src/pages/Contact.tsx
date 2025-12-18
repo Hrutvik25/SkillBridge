@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,7 +43,6 @@ const contactInfo = [
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement>(null);
 
   const {
     register,
@@ -59,23 +58,33 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      if (!formRef.current) {
-        throw new Error("Form reference is not available");
-      }
-
       // Send email to admin
-      const adminResult = await emailjs.sendForm(
+      const adminTemplateParams = {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        to_email: "prasulabs@gmail.com", // Admin email
+      };
+
+      const adminResult = await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID,
-        formRef.current,
+        adminTemplateParams,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
       // Send auto-reply to user
-      const userResult = await emailjs.sendForm(
+      const userTemplateParams = {
+        name: data.name,
+        email: data.email,
+        message: data.message,
+        to_email: data.email, // User's email
+      };
+
+      const userResult = await emailjs.send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID,
-        formRef.current,
+        userTemplateParams,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
@@ -127,7 +136,7 @@ export default function Contact() {
                 Send us a Message
               </h2>
 
-              <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                   <Label htmlFor="name">Your Name</Label>
                   <Input
@@ -135,7 +144,6 @@ export default function Contact() {
                     placeholder="John Doe"
                     className="mt-1"
                     {...register("name")}
-                    name="name"
                   />
                   {errors.name && (
                     <p className="text-sm text-destructive mt-1">{errors.name.message}</p>
@@ -150,7 +158,6 @@ export default function Contact() {
                     placeholder="you@example.com"
                     className="mt-1"
                     {...register("email")}
-                    name="email"
                   />
                   {errors.email && (
                     <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
@@ -165,7 +172,6 @@ export default function Contact() {
                     rows={5}
                     className="mt-1 resize-none"
                     {...register("message")}
-                    name="message"
                   />
                   {errors.message && (
                     <p className="text-sm text-destructive mt-1">{errors.message.message}</p>
