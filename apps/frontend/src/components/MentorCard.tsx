@@ -89,7 +89,7 @@ export function MentorCard({
             </h3>
           </Link>
         </div>
-        {availability && (
+        {availability && availability !== "none" && (
           <p className="text-xs text-muted-foreground mb-2 uppercase tracking-wide">Available: {availability.replace("-", " ")}</p>
         )}
 

@@ -146,12 +146,12 @@ export function CourseCard({
         </div>
 
         {/* CTA */}
-        <Link to={`/courses/${slug}`}>
+        {/* <Link to={`/courses/${slug}`}>
           <Button variant="outline" className="w-full group/btn">
             View Course
             <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );
