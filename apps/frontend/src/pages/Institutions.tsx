@@ -21,7 +21,8 @@ export default function Institutions() {
                 Partner with SKILLBRIDGE
               </a>
               <a
-                href="#"
+                href="/brochure/SkillBridge – Institutional Brochure.pdf"
+                download="SkillBridge-Institutional-Brochure.pdf"
                 className="inline-block px-6 py-3 bg-slate-600 text-white rounded-md font-semibold"
               >
                 Download Institutional Brochure
