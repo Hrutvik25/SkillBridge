@@ -224,6 +224,21 @@ export const adminApi = {
     }
     return data.url;
   },
+  // Team member management
+  addTeamMember: async (member: Partial<TeamMember>) =>
+    apiRequest<TeamMember>("/admin/team", {
+      method: "POST",
+      body: JSON.stringify(member),
+    }),
+
+  updateTeamMember: async (id: string, member: Partial<TeamMember>) =>
+    apiRequest<TeamMember>(`/admin/team/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(member),
+    }),
+
+  deleteTeamMember: async (id: string) =>
+    apiRequest<{ message: string }>(`/admin/team/${id}`, { method: "DELETE" }),
 };
 
 // =====================
