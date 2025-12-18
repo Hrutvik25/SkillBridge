@@ -158,7 +158,7 @@ router.post('/mentors', authenticate, requireAdmin, async (req, res) => {
       image_url: image_url || null,
       linkedin: linkedin || null,
       skills: skills || [],
-      availability: availability || 'weekdays',
+      availability: availability !== undefined ? availability : 'weekdays',
       active: active !== undefined ? active : true,
       display_order: display_order ?? 999
     });
@@ -187,7 +187,7 @@ router.put('/mentors/:id', authenticate, requireAdmin, async (req, res) => {
         active: active !== undefined ? active : true,
         image_url: image_url ?? null,
         linkedin: linkedin ?? null,
-        availability: availability || 'weekdays',
+        availability: availability !== undefined ? availability : 'weekdays',
         display_order: display_order ?? 999
       },
       { new: true, runValidators: true }

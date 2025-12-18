@@ -31,7 +31,7 @@ const mentorSchema = new mongoose.Schema({
   },
   availability: {
     type: String,
-    enum: ['weekdays', 'weekends', 'on-demand'],
+    enum: ['weekdays', 'weekends', 'on-demand', 'none'],
     default: 'weekdays'
   },
   active: {
