@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Phone, MapPin, Send, Loader2 } from "lucide-react";
+import emailjs from "@emailjs/browser";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { contactApi } from "@/lib/api";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
@@ -23,8 +23,8 @@ const contactInfo = [
   {
     icon: Mail,
     label: "Email",
-    value: "Prasulabs@gmail.com",
-    href: "mailto:Prasulabs@gmail.com",
+    value: "prasulabs@gmail.com",
+    href: "mailto:prasulabs@gmail.com",
   },
   {
     icon: Phone,
@@ -43,6 +43,7 @@ const contactInfo = [
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const {
     register,
@@ -58,13 +59,37 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      await contactApi.send(data.name, data.email, data.message);
-      toast({
-        title: "Message sent!",
-        description: "We'll get back to you as soon as possible.",
-      });
-      reset();
+      if (!formRef.current) {
+        throw new Error("Form reference is not available");
+      }
+
+      // Send email to admin
+      const adminResult = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      // Send auto-reply to user
+      const userResult = await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      if (adminResult.status === 200 && userResult.status === 200) {
+        toast({
+          title: "Message sent!",
+          description: "We'll get back to you as soon as possible.",
+        });
+        reset();
+      } else {
+        throw new Error("Failed to send one or both emails");
+      }
     } catch (error) {
+      console.error("Email error:", error);
       toast({
         title: "Failed to send message",
         description: "Please try again later.",
@@ -102,7 +127,7 @@ export default function Contact() {
                 Send us a Message
               </h2>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div>
                   <Label htmlFor="name">Your Name</Label>
                   <Input
@@ -110,6 +135,7 @@ export default function Contact() {
                     placeholder="John Doe"
                     className="mt-1"
                     {...register("name")}
+                    name="name"
                   />
                   {errors.name && (
                     <p className="text-sm text-destructive mt-1">{errors.name.message}</p>
@@ -124,6 +150,7 @@ export default function Contact() {
                     placeholder="you@example.com"
                     className="mt-1"
                     {...register("email")}
+                    name="email"
                   />
                   {errors.email && (
                     <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
@@ -138,6 +165,7 @@ export default function Contact() {
                     rows={5}
                     className="mt-1 resize-none"
                     {...register("message")}
+                    name="message"
                   />
                   {errors.message && (
                     <p className="text-sm text-destructive mt-1">{errors.message.message}</p>
