@@ -36,7 +36,7 @@ export interface ImageUploadResponse {
   error?: string;
 }
 
-export type MentorAvailability = "weekdays" | "weekends" | "on-demand";
+export type MentorAvailability = "weekdays" | "weekends" | "on-demand" | "none";
 
 export interface TeamMember {
   _id?: string;

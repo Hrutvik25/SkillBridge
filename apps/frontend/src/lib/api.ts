@@ -183,6 +183,9 @@ export const adminApi = {
       teamMembers: TeamMember[];
     }>("/admin/stats"),
 
+  getEnrollments: async () =>
+    apiRequest<EnrollmentDetails[]>("/admin/enrollments"),
+
   addMentor: async (mentor: Partial<Mentor>) =>
     apiRequest<Mentor>("/admin/mentors", {
       method: "POST",
@@ -305,6 +308,22 @@ export interface Mentor {
 export interface Enrollment {
   id: string;
   enrolled_at: string;
+}
+
+export interface EnrollmentDetails {
+  id: string;
+  enrolled_at: string;
+  user: {
+    id: string | null;
+    full_name: string | null;
+    email: string | null;
+    created_at: string | null;
+  };
+  course: {
+    id: string | null;
+    course_name: string;
+    slug: string | null;
+  };
 }
 
 export interface Profile {

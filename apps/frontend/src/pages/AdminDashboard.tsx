@@ -473,6 +473,7 @@ export default function AdminDashboard() {
                           <SelectItem value="weekdays">Weekdays</SelectItem>
                           <SelectItem value="weekends">Weekends</SelectItem>
                           <SelectItem value="on-demand">On Demand</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -489,7 +490,7 @@ export default function AdminDashboard() {
                     <tr key={m._id} className="border-t border-border">
                       <td className="p-3 font-medium">{m.name}</td>
                       <td className="p-3 text-muted-foreground">{m.title || "-"}</td>
-                      <td className="p-3 text-muted-foreground capitalize">{m.availability?.replace("-", " ") || "weekdays"}</td>
+                      <td className="p-3 text-muted-foreground capitalize">{m.availability === "none" ? "" : (m.availability?.replace("-", " ") || "weekdays")}</td>
                       <td className="p-3"><span className={`px-2 py-1 rounded text-xs ${m.active ? "bg-success/10 text-success" : "bg-muted text-muted-foreground"}`}>{m.active ? "Visible" : "Hidden"}</span></td>
                       <td className="p-3 flex gap-2 justify-end"><Button variant="ghost" size="icon" onClick={() => toggleMentorVisibility(m._id, m.active)} title={m.active ? "Hide mentor" : "Show mentor"}>{m.active ? <Eye className="h-4 w-4 text-primary" /> : <EyeOff className="h-4 w-4 text-muted-foreground" />}</Button><Button variant="ghost" size="icon" onClick={() => openEditMentor(m)}><Edit className="h-4 w-4 text-primary" /></Button><Button variant="ghost" size="icon" onClick={() => deleteMentor(m._id)}><Trash2 className="h-4 w-4 text-destructive" /></Button></td>
                     </tr>
