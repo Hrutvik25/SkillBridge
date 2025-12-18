@@ -203,6 +203,21 @@ export const adminApi = {
       method: "DELETE",
     }),
 
+  addCourse: async (course: Partial<Course>) =>
+    apiRequest<Course>("/admin/courses", {
+      method: "POST",
+      body: JSON.stringify(course),
+    }),
+
+  updateCourse: async (id: string, course: Partial<Course>) =>
+    apiRequest<Course>(`/admin/courses/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(course),
+    }),
+
+  deleteCourse: async (id: string) =>
+    apiRequest<{ message: string }>(`/admin/courses/${id}`, { method: "DELETE" }),
+
   uploadImage: async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("image", file);
@@ -293,6 +308,17 @@ export interface Course {
   course_name?: string;
   slug?: string;
   image_url?: string | null;
+  image?: string | null;
+  date?: string;
+  duration?: string;
+  description?: string;
+  short_description?: string;
+  full_description?: string;
+  price?: number | null;
+  duration_weeks?: number | null;
+  mode?: ("online" | "offline")[];
+  tags?: string[];
+  published?: boolean;
 }
 
 export interface Mentor {
