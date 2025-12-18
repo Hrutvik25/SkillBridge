@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 
 export default function Institutions() {
@@ -169,12 +170,12 @@ export default function Institutions() {
             Connect with SKILLBRIDGE to explore a partnership tailored to your
             institution.
           </p>
-          <a
-            href="/contact"
+          <Link
+            to="/contact"
             className="inline-block px-6 py-3 bg-white text-primary rounded-md font-semibold"
           >
             Request a Partnership Discussion
-          </a>
+          </Link>
         </div>
       </section>
 
