@@ -36,7 +36,7 @@ app.use(cors({
     'http://127.0.0.1:5173',
 
     /\.vercel\.app$/,  // Allow all Vercel deployments
-    "https://ivory-chimpanzee-231848.hostingersite.com"  // Your specific frontend URL
+    "https://lightgreen-mongoose-943742.hostingersite.com"  // Your specific frontend URL
   ].filter(Boolean),  // Remove any falsy values
   credentials: true,
 }));

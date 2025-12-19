@@ -5,7 +5,8 @@ import type { MentorAvailability, TeamMember } from "./types";
  * - Netlify env:  VITE_API_BASE_URL = https://skillbridge-4373.onrender.com/api
  * - Local env:    VITE_API_BASE_URL = http://localhost:5000/api
  */
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE_URL = "https://skillbridge-4373.onrender.com/api";
+
 
 // =====================
 // Token helpers
