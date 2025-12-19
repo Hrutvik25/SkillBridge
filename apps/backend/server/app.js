@@ -34,8 +34,9 @@ app.use(cors({
     'http://localhost:5173', 
     'http://localhost:8080', 
     'http://127.0.0.1:5173',
+
     /\.vercel\.app$/,  // Allow all Vercel deployments
-    process.env.FRONTEND_URL  // Your specific frontend URL
+    "https://ivory-chimpanzee-231848.hostingersite.com"  // Your specific frontend URL
   ].filter(Boolean),  // Remove any falsy values
   credentials: true,
 }));
