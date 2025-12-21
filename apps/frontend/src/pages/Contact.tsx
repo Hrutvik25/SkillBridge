@@ -11,6 +11,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
+/* =========================
+   EMAILJS CONFIG (HOSTINGER)
+   ========================= */
+const EMAILJS_SERVICE_ID = "service_zyj7vpf";
+const EMAILJS_ADMIN_TEMPLATE_ID = "template_ln3k5x9";
+const EMAILJS_USER_TEMPLATE_ID = "template_085tqv5";
+const EMAILJS_PUBLIC_KEY = "lTPr4XZmF7eu3yn2T";
+
+/* ========================= */
+
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(100),
   email: z.string().email("Please enter a valid email address").max(255),
@@ -58,45 +68,38 @@ export default function Contact() {
     setIsSubmitting(true);
 
     try {
-      // Send email to admin
-      const adminTemplateParams = {
-        name: data.name,
-        email: data.email,
-        message: data.message,
-        to_email: "prasulabs@gmail.com", // Admin email
-      };
-
-      const adminResult = await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_ADMIN_TEMPLATE_ID,
-        adminTemplateParams,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      // Admin email
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_ADMIN_TEMPLATE_ID,
+        {
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          to_email: "prasulabs@gmail.com",
+        },
+        EMAILJS_PUBLIC_KEY
       );
 
-      // Send auto-reply to user
-      const userTemplateParams = {
-        name: data.name,
-        email: data.email,
-        message: data.message,
-        to_email: data.email, // User's email
-      };
-
-      const userResult = await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_USER_TEMPLATE_ID,
-        userTemplateParams,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      // User auto-reply
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_USER_TEMPLATE_ID,
+        {
+          name: data.name,
+          email: data.email,
+          message: data.message,
+          to_email: data.email,
+        },
+        EMAILJS_PUBLIC_KEY
       );
 
-      if (adminResult.status === 200 && userResult.status === 200) {
-        toast({
-          title: "Message sent!",
-          description: "We'll get back to you as soon as possible.",
-        });
-        reset();
-      } else {
-        throw new Error("Failed to send one or both emails");
-      }
+      toast({
+        title: "Message sent!",
+        description: "We'll get back to you as soon as possible.",
+      });
+
+      reset();
     } catch (error) {
       console.error("Email error:", error);
       toast({
@@ -111,136 +114,59 @@ export default function Contact() {
 
   return (
     <Layout>
-      {/* Hero */}
       <section className="bg-gradient-hero py-16 lg:py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl">
-            <h1 className="text-3xl lg:text-4xl font-display font-bold text-primary-foreground mb-4">
-              Get in Touch
-            </h1>
-            <p className="text-lg text-primary-foreground/80">
-              Have questions? We'd love to hear from you. Send us a message and we'll
-              respond as soon as possible.
-            </p>
-          </div>
+          <h1 className="text-3xl lg:text-4xl font-display font-bold text-primary-foreground mb-4">
+            Get in Touch
+          </h1>
+          <p className="text-lg text-primary-foreground/80">
+            Have questions? We'd love to hear from you.
+          </p>
         </div>
       </section>
 
-      {/* Contact Content */}
       <section className="py-16 lg:py-24 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
-            <div className="bg-card rounded-xl border border-border p-8">
-              <h2 className="text-2xl font-display font-bold text-foreground mb-6">
-                Send us a Message
-              </h2>
+        <div className="container mx-auto px-4 grid lg:grid-cols-2 gap-12">
+          <div className="bg-card rounded-xl border p-8">
+            <h2 className="text-2xl font-bold mb-6">Send us a Message</h2>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                <div>
-                  <Label htmlFor="name">Your Name</Label>
-                  <Input
-                    id="name"
-                    placeholder="John Doe"
-                    className="mt-1"
-                    {...register("name")}
-                  />
-                  {errors.name && (
-                    <p className="text-sm text-destructive mt-1">{errors.name.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="email">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    className="mt-1"
-                    {...register("email")}
-                  />
-                  {errors.email && (
-                    <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
-                  )}
-                </div>
-
-                <div>
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    placeholder="How can we help you?"
-                    rows={5}
-                    className="mt-1 resize-none"
-                    {...register("message")}
-                  />
-                  {errors.message && (
-                    <p className="text-sm text-destructive mt-1">{errors.message.message}</p>
-                  )}
-                </div>
-
-                <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Sending...
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-4 w-4" />
-                      Send Message
-                    </>
-                  )}
-                </Button>
-              </form>
-            </div>
-
-            {/* Contact Info */}
-            <div>
-              <h2 className="text-2xl font-display font-bold text-foreground mb-6">
-                Contact Information
-              </h2>
-
-              <div className="space-y-6 mb-12">
-                {contactInfo.map((info) => (
-                  <div key={info.label} className="flex items-start gap-4">
-                    <div className="flex-shrink-0 p-3 rounded-lg bg-primary/10">
-                      <info.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">{info.label}</p>
-                      {info.href ? (
-                        <a
-                          href={info.href}
-                          className="text-foreground font-medium hover:text-primary transition-colors"
-                        >
-                          {info.value}
-                        </a>
-                      ) : (
-                        <p className="text-foreground font-medium">{info.value}</p>
-                      )}
-                    </div>
-                  </div>
-                ))}
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+              <div>
+                <Label>Your Name</Label>
+                <Input {...register("name")} />
+                {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
               </div>
 
-              {/* Office Hours */}
-              <div className="bg-muted/50 rounded-xl p-6">
-                <h3 className="font-semibold text-foreground mb-4">Office Hours</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Monday - Friday</span>
-                    <span className="text-foreground">9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Saturday</span>
-                    <span className="text-foreground">10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Sunday</span>
-                    <span className="text-foreground">Closed</span>
-                  </div>
-                </div>
+              <div>
+                <Label>Email</Label>
+                <Input type="email" {...register("email")} />
+                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
               </div>
+
+              <div>
+                <Label>Message</Label>
+                <Textarea rows={5} {...register("message")} />
+                {errors.message && (
+                  <p className="text-sm text-destructive">{errors.message.message}</p>
+                )}
+              </div>
+
+              <Button type="submit" disabled={isSubmitting} className="w-full">
+                {isSubmitting ? <Loader2 className="animate-spin" /> : <Send />}
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </div>
+
+          <div>
+            <h2 className="text-2xl font-bold mb-6">Contact Information</h2>
+            <div className="space-y-6">
+              {contactInfo.map((info) => (
+                <div key={info.label} className="flex gap-4">
+                  <info.icon />
+                  {info.href ? <a href={info.href}>{info.value}</a> : <p>{info.value}</p>}
+                </div>
+              ))}
             </div>
           </div>
         </div>
