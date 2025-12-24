@@ -50,3 +50,65 @@ export interface TeamMember {
   display_order?: number;
   created_at?: string;
 }
+
+// Mentor Schedule Types
+export interface MentorSchedule {
+  _id?: string;
+  courseName: string;
+  mentorId: string;
+  mentor: {
+    _id: string;
+    name: string;
+    image_url: string;
+  };
+  courseLevel: 'Beginner' | 'Advanced' | 'Project Based' | 'Hackathon';
+  mentorAvailability: 'Available' | 'Not Available';
+  confirmationStatus: 'Pending' | 'Confirmed' | 'Rejected';
+  courseContentReady: 'Yes' | 'No';
+  lectureDate: string | Date;
+  lectureTime: string;
+  mode: 'Online' | 'Offline' | 'Hybrid';
+  meetingLink?: string;
+  location?: string;
+  mentorEmail: string;
+  mentorMobile: string;
+  sessionStatus: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
+  emailStatus: 'Not Sent' | 'Sent' | 'Failed';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CreateMentorSchedulePayload {
+  courseName: string;
+  mentorId: string;
+  courseLevel: 'Beginner' | 'Advanced' | 'Project Based' | 'Hackathon';
+  mentorAvailability?: 'Available' | 'Not Available';
+  confirmationStatus?: 'Pending' | 'Confirmed' | 'Rejected';
+  courseContentReady?: 'Yes' | 'No';
+  lectureDate: string;
+  lectureTime: string;
+  mode: 'Online' | 'Offline' | 'Hybrid';
+  meetingLink?: string;
+  location?: string;
+  mentorEmail: string;
+  mentorMobile: string;
+  sessionStatus?: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
+}
+
+export interface UpdateMentorSchedulePayload {
+  courseName?: string;
+  mentorId?: string;
+  courseLevel?: 'Beginner' | 'Advanced' | 'Project Based' | 'Hackathon';
+  mentorAvailability?: 'Available' | 'Not Available';
+  confirmationStatus?: 'Pending' | 'Confirmed' | 'Rejected';
+  courseContentReady?: 'Yes' | 'No';
+  lectureDate?: string;
+  lectureTime?: string;
+  mode?: 'Online' | 'Offline' | 'Hybrid';
+  meetingLink?: string;
+  location?: string;
+  mentorEmail?: string;
+  mentorMobile?: string;
+  sessionStatus?: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
+  emailStatus?: 'Not Sent' | 'Sent' | 'Failed';
+}

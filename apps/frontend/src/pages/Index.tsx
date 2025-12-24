@@ -295,11 +295,14 @@ export default function Index() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
-            <h1 className="inline-block text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-6 animate-fade-in-up whitespace-nowrap">
-              Empowering Careers, <span className="text-accent">Elevating Institutions.</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-primary-foreground mb-5 leading-tight animate-fade-in-up">
+              Empowering Careers,{" "}
+              <span className="text-accent block sm:inline">
+                Elevating Institutions.
+              </span>
             </h1>
-            <p className="text-lg md:text-xl text-primary-foreground/80 mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-             Your bridge to domain coaching, skilled-development, and hiring for students and educational partners.
+            <p className="text-base sm:text-lg md:text-xl text-primary-foreground/80 mb-8 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+              Your bridge to domain coaching, skilled-development, and hiring for students and educational partners.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
               <Link to="/courses">

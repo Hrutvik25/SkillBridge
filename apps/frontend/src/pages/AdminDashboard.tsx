@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Users, BookOpen, GraduationCap, Mail, Plus, Trash2, Edit, Loader2, Eye, EyeOff, Image, UploadCloud } from "lucide-react";
+import { Users, BookOpen, GraduationCap, Mail, Plus, Trash2, Edit, Loader2, Eye, EyeOff, Image, UploadCloud, Calendar, ArrowRight } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -447,6 +447,7 @@ export default function AdminDashboard() {
             <TabsTrigger value="team">Our Team</TabsTrigger>
             <TabsTrigger value="gallery">Gallery</TabsTrigger>
             <TabsTrigger value="enrollments">Enrollments</TabsTrigger>
+            <TabsTrigger value="mentor-schedule">Mentor Schedules</TabsTrigger>
           </TabsList>
 
           <TabsContent value="mentors" className="mt-6">
@@ -825,6 +826,36 @@ export default function AdminDashboard() {
                   )}
                 </tbody>
               </table>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="mentor-schedule" className="mt-6">
+            <div className="bg-card rounded-xl border border-border p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-lg font-semibold">Mentor Schedules</h2>
+                <p className="text-sm text-muted-foreground">
+                  Manage mentor lecture schedules and confirmations
+                </p>
+              </div>
+              
+              <div className="bg-muted/50 rounded-lg p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="text-lg font-medium mb-2">Mentor Schedule Management</h3>
+                  <p className="text-muted-foreground mb-4">
+                    Manage mentor lecture schedules, confirmations, and communications from this dedicated dashboard.
+                  </p>
+                  <a 
+                    href="/admin/mentor-schedule" 
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors"
+                  >
+                    Go to Mentor Schedules
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

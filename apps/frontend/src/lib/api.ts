@@ -5,8 +5,7 @@ import type { MentorAvailability, TeamMember } from "./types";
  * - Netlify env:  VITE_API_BASE_URL = https://skillbridge-4373.onrender.com/api
  * - Local env:    VITE_API_BASE_URL = http://localhost:5000/api
  */
-const API_BASE_URL = "https://skillbridge-4373.onrender.com/api";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
 
 // =====================
 // Token helpers
@@ -367,6 +366,37 @@ export interface AdminStats {
 }
 
 export type { TeamMember, MentorAvailability } from "./types";
+
+// =====================
+// Mentor Schedule API
+// =====================
+export const mentorScheduleApi = {
+  getAll: async () => apiRequest<MentorSchedule[]>("/mentor-schedule"),
+
+  getById: async (id: string) => apiRequest<MentorSchedule>(`/mentor-schedule/${id}`),
+
+  create: async (schedule: CreateMentorSchedulePayload) =>
+    apiRequest<MentorSchedule>("/mentor-schedule", {
+      method: "POST",
+      body: JSON.stringify(schedule),
+    }),
+
+  update: async (id: string, schedule: UpdateMentorSchedulePayload) =>
+    apiRequest<MentorSchedule>(`/mentor-schedule/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(schedule),
+    }),
+
+  delete: async (id: string) =>
+    apiRequest<{ message: string }>(`/mentor-schedule/${id}`, {
+      method: "DELETE",
+    }),
+
+  sendEmail: async (id: string) =>
+    apiRequest<{ message: string }>(`/mentor-schedule/${id}/send-email`, {
+      method: "POST",
+    }),
+};
 
 // =====================
 // Auth helper

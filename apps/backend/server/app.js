@@ -17,6 +17,8 @@ import profilesRoutes from './routes/profiles.js';
 import contactRoutes from './routes/contact.js';
 import adminRoutes from './routes/admin.js';
 import galleryRoutes from './routes/gallery.js';
+import mentorScheduleRoutes from './routes/mentorSchedule.js';
+import mentorConfirmationRoutes from './routes/mentorConfirmation.js';
 
 dotenv.config();
 
@@ -57,6 +59,8 @@ app.use('/api/profiles', profilesRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/mentor-schedule', mentorScheduleRoutes);
+app.use('/mentor-confirmation', mentorConfirmationRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

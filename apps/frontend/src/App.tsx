@@ -23,6 +23,7 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import MentorScheduleDashboard from "./pages/MentorScheduleDashboard";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,11 @@ const App = () => (
             <Route path="/admin" element={
               <ProtectedRoute requireAdmin>
                 <AdminDashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/mentor-schedule" element={
+              <ProtectedRoute requireAdmin>
+                <MentorScheduleDashboard />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
