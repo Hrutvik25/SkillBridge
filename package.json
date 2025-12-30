@@ -20,6 +20,7 @@
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@sendgrid/mail": "^8.1.6",
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "react-csv": "^2.2.2"
   }
 }

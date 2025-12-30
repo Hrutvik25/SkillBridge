@@ -11,7 +11,8 @@ import {
   Users,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Download
 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -35,8 +36,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { mentorScheduleApi, mentorsApi, Mentor, MentorSchedule } from '@/lib/api';
+import { mentorScheduleApi, mentorsApi, Mentor } from '@/lib/api';
+import { MentorSchedule, CreateMentorSchedulePayload, UpdateMentorSchedulePayload } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { CSVLink } from 'react-csv';
 
 export default function MentorScheduleDashboard() {
   const [schedules, setSchedules] = useState<MentorSchedule[]>([]);
@@ -189,7 +192,7 @@ export default function MentorScheduleDashboard() {
       const result = await mentorScheduleApi.sendEmail(id);
       // Update the schedule in the list to reflect the new email status
       const updatedSchedules = schedules.map(schedule => 
-        schedule._id === id ? { ...schedule, emailStatus: 'Sent' } : schedule
+        schedule._id === id ? { ...schedule, emailStatus: 'Sent' as const } : schedule
       );
       setSchedules(updatedSchedules);
       toast({
@@ -250,16 +253,71 @@ export default function MentorScheduleDashboard() {
     return mentor ? mentor.image_url : null;
   };
 
+  // Function to prepare CSV data
+  const prepareCSVData = () => {
+    return schedules.map(schedule => ({
+      'Course Name': schedule.courseName,
+      'Mentor Name': schedule.mentor?.name || getMentorName(schedule.mentorId),
+      'Course Level': schedule.courseLevel,
+      'Mentor Availability': schedule.mentorAvailability,
+      'Confirmation Status': schedule.confirmationStatus,
+      'Course Content Ready': schedule.courseContentReady,
+      'Lecture Date': format(new Date(schedule.lectureDate), 'yyyy-MM-dd'),
+      'Lecture Time': schedule.lectureTime,
+      'Mode': schedule.mode,
+      'Meeting Link': schedule.meetingLink || '',
+      'Location': schedule.location || '',
+      'Mentor Email': schedule.mentorEmail,
+      'Mentor Mobile': schedule.mentorMobile,
+      'Session Status': schedule.sessionStatus,
+      'Email Status': schedule.emailStatus,
+      'Created At': schedule.createdAt ? format(new Date(schedule.createdAt), 'yyyy-MM-dd HH:mm:ss') : '',
+      'Updated At': schedule.updatedAt ? format(new Date(schedule.updatedAt), 'yyyy-MM-dd HH:mm:ss') : ''
+    }));
+  };
+
+  // CSV headers
+  const csvHeaders = [
+    { label: 'Course Name', key: 'Course Name' },
+    { label: 'Mentor Name', key: 'Mentor Name' },
+    { label: 'Course Level', key: 'Course Level' },
+    { label: 'Mentor Availability', key: 'Mentor Availability' },
+    { label: 'Confirmation Status', key: 'Confirmation Status' },
+    { label: 'Course Content Ready', key: 'Course Content Ready' },
+    { label: 'Lecture Date', key: 'Lecture Date' },
+    { label: 'Lecture Time', key: 'Lecture Time' },
+    { label: 'Mode', key: 'Mode' },
+    { label: 'Meeting Link', key: 'Meeting Link' },
+    { label: 'Location', key: 'Location' },
+    { label: 'Mentor Email', key: 'Mentor Email' },
+    { label: 'Mentor Mobile', key: 'Mentor Mobile' },
+    { label: 'Session Status', key: 'Session Status' },
+    { label: 'Email Status', key: 'Email Status' },
+    { label: 'Created At', key: 'Created At' },
+    { label: 'Updated At', key: 'Updated At' }
+  ];
+
+  const csvData = prepareCSVData();
+
   if (loading) {
     return (
       <Layout>
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold">Mentor Schedules</h1>
-            <Button onClick={handleAddSchedule}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Schedule
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                onClick={loadSchedulesAndMentors}
+                disabled={loading}
+              >
+                Refresh
+              </Button>
+              <Button onClick={handleAddSchedule}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Schedule
+              </Button>
+            </div>
           </div>
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
@@ -283,6 +341,19 @@ export default function MentorScheduleDashboard() {
             >
               Refresh
             </Button>
+            {schedules.length > 0 && (
+              <CSVLink 
+                data={csvData} 
+                headers={csvHeaders}
+                filename="mentor-schedules.csv"
+                className="no-underline"
+              >
+                <Button variant="outline">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export CSV
+                </Button>
+              </CSVLink>
+            )}
             <Button onClick={handleAddSchedule}>
               <Plus className="h-4 w-4 mr-2" />
               Add Schedule
@@ -460,8 +531,8 @@ export default function MentorScheduleDashboard() {
                       if (mentor) {
                         setFormData(prev => ({
                           ...prev,
-                          mentorEmail: mentor.email || prev.mentorEmail,
-                          mentorMobile: mentor.mobile || prev.mentorMobile
+                          mentorEmail: prev.mentorEmail,
+                          mentorMobile: prev.mentorMobile
                         }));
                       }
                     }}
