@@ -132,3 +132,21 @@ export interface UpdateMentorSchedulePayload {
   sessionStatus?: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
   emailStatus?: 'Not Sent' | 'Sent' | 'Failed';
 }
+
+export interface Mentor {
+  _id?: string;
+  name: string;
+  title: string | null;
+  bio: string | null;
+  image_url: string | null;
+  skills: string[] | null;
+  linkedin: string | null;
+  twitter: string | null;
+  email: string | null;
+  phone: string | null;
+  availability: MentorAvailability;
+  active: boolean;
+  display_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}

@@ -363,6 +363,8 @@ export interface AdminStats {
   courses: number;
   mentors: number;
   enrollments: number;
+  messages?: number;
+  team?: number;
 }
 
 export type { TeamMember, MentorAvailability } from "./types";

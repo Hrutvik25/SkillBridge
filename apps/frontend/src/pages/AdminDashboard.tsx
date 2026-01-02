@@ -31,7 +31,7 @@ export default function AdminDashboard() {
   const { toast } = useToast();
 
   // Form states
-  const [mentorForm, setMentorForm] = useState({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", availability: "weekdays" as MentorAvailability });
+  const [mentorForm, setMentorForm] = useState({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", email: "", phone: "", availability: "weekdays" as MentorAvailability });
   const [editingMentorId, setEditingMentorId] = useState<string | null>(null);
   
   const [courseForm, setCourseForm] = useState<CourseFormState & { image?: string; published?: boolean }>({
@@ -103,6 +103,8 @@ export default function AdminDashboard() {
           skills: mentorForm.skills ? mentorForm.skills.split(",").map(s => s.trim()) : [],
           image_url: mentorForm.image_url || null,
           linkedin: mentorForm.linkedin || null,
+          email: mentorForm.email || null,
+          phone: mentorForm.phone || null,
           availability: mentorForm.availability,
           active: true,
         });
@@ -116,12 +118,14 @@ export default function AdminDashboard() {
           skills: mentorForm.skills ? mentorForm.skills.split(",").map(s => s.trim()) : [],
           image_url: mentorForm.image_url || null,
           linkedin: mentorForm.linkedin || null,
+          email: mentorForm.email || null,
+          phone: mentorForm.phone || null,
           availability: mentorForm.availability,
           active: true,
         });
         toast({ title: "Mentor added" });
       }
-      setMentorForm({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", availability: "weekdays" });
+      setMentorForm({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", email: "", phone: "", availability: "weekdays" });
       setDialogOpen(false);
       fetchData();
     } catch (error: any) {
@@ -137,6 +141,8 @@ export default function AdminDashboard() {
       skills: mentor.skills?.join(", ") || "",
       image_url: mentor.image_url || "",
       linkedin: mentor.linkedin || "",
+      email: mentor.email || "",
+      phone: mentor.phone || "",
       availability: (mentor.availability as MentorAvailability) || "weekdays",
     });
     setEditingMentorId(mentor._id);
@@ -147,7 +153,7 @@ export default function AdminDashboard() {
     setDialogOpen(false);
     setCourseDialogOpen(false);
     setTeamDialogOpen(false);
-    setMentorForm({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", availability: "weekdays" });
+    setMentorForm({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", email: "", phone: "", availability: "weekdays" });
     setCourseForm({ course_name: "", date: "", duration: "", description: "", price: "", mode: [], image: "", published: true });
     setTeamForm({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "" });
     setEditingMentorId(null);
@@ -272,8 +278,18 @@ export default function AdminDashboard() {
       if (mentor) {
         // Send all mentor data to preserve image_url and linkedin fields
         await adminApi.updateMentor(id, { 
-          ...mentor,
-          active: !currentActive 
+          name: mentor.name,
+          title: mentor.title,
+          bio: mentor.bio,
+          image_url: mentor.image_url,
+          skills: mentor.skills,
+          linkedin: mentor.linkedin,
+          twitter: mentor.twitter,
+          email: mentor.email,
+          phone: mentor.phone,
+          availability: mentor.availability,
+          active: !currentActive,
+          display_order: mentor.display_order,
         });
       } else {
         // Fallback to just updating active status
@@ -457,7 +473,7 @@ export default function AdminDashboard() {
                 <DialogTrigger asChild>
                   <Button size="sm"><Plus className="h-4 w-4 mr-1" /> Add Mentor</Button>
                 </DialogTrigger>
-                <DialogContent>
+                <DialogContent className="max-h-[80vh] overflow-y-auto">
                   <DialogHeader><DialogTitle>{editingMentorId ? "Edit Mentor" : "Add Mentor"}</DialogTitle></DialogHeader>
                   <div className="space-y-4">
                     <div><Label>Name *</Label><Input value={mentorForm.name} onChange={(e) => setMentorForm({ ...mentorForm, name: e.target.value })} /></div>
@@ -466,6 +482,8 @@ export default function AdminDashboard() {
                     <div><Label>Skills (comma-separated)</Label><Input value={mentorForm.skills} onChange={(e) => setMentorForm({ ...mentorForm, skills: e.target.value })} /></div>
                     <div><Label>Image URL</Label><Input placeholder="/images/1.jpeg or https://..." value={mentorForm.image_url} onChange={(e) => setMentorForm({ ...mentorForm, image_url: e.target.value })} /></div>
                     <div><Label>LinkedIn URL</Label><Input placeholder="https://linkedin.com/in/..." value={mentorForm.linkedin} onChange={(e) => setMentorForm({ ...mentorForm, linkedin: e.target.value })} /></div>
+                        <div><Label>Email</Label><Input type="email" placeholder="mentor@example.com" value={mentorForm.email} onChange={(e) => setMentorForm({ ...mentorForm, email: e.target.value })} /></div>
+                        <div><Label>Phone</Label><Input type="tel" placeholder="1234567890" value={mentorForm.phone} onChange={(e) => setMentorForm({ ...mentorForm, phone: e.target.value })} /></div>
                     <div className="space-y-2">
                       <Label>Availability</Label>
                       <Select value={mentorForm.availability} onValueChange={(value: MentorAvailability) => setMentorForm({ ...mentorForm, availability: value })}>
