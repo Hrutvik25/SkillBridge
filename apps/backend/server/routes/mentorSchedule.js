@@ -13,7 +13,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 router.get('/', authenticate, requireAdmin, async (req, res) => {
   try {
     const schedules = await MentorSchedule.find()
-      .populate('mentorId', 'name image_url')
+      .populate('mentorId', 'name image_url email phone')
       .sort({ lectureDate: 1, lectureTime: 1 });
 
     // Transform the data to match the frontend expectation
@@ -37,7 +37,7 @@ router.get('/', authenticate, requireAdmin, async (req, res) => {
 router.get('/:id', authenticate, requireAdmin, async (req, res) => {
   try {
     const schedule = await MentorSchedule.findById(req.params.id)
-      .populate('mentorId', 'name image_url');
+      .populate('mentorId', 'name image_url email phone');
 
     if (!schedule) {
       return res.status(404).json({ error: 'Schedule not found' });
@@ -131,7 +131,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
 
     // Populate the mentor data and return transformed schedule
     const populatedSchedule = await MentorSchedule.findById(newSchedule._id)
-      .populate('mentorId', 'name image_url');
+      .populate('mentorId', 'name image_url email phone');
 
     const transformedSchedule = {
       ...populatedSchedule.toObject(),
@@ -193,7 +193,7 @@ router.put('/:id', authenticate, requireAdmin, async (req, res) => {
       req.params.id,
       updateData,
       { new: true, runValidators: true }
-    ).populate('mentorId', 'name image_url');
+    ).populate('mentorId', 'name image_url email phone');
 
     if (!schedule) {
       return res.status(404).json({ error: 'Schedule not found' });
@@ -236,7 +236,7 @@ router.delete('/:id', authenticate, requireAdmin, async (req, res) => {
 router.post('/:id/send-email', authenticate, requireAdmin, async (req, res) => {
   try {
     const schedule = await MentorSchedule.findById(req.params.id)
-      .populate('mentorId', 'name');
+      .populate('mentorId', 'name image_url email phone');
 
     if (!schedule) {
       return res.status(404).json({ error: 'Schedule not found' });
@@ -316,7 +316,7 @@ router.post('/:id/send-email', authenticate, requireAdmin, async (req, res) => {
 
       // Return updated schedule with transformed data
       const updatedSchedule = await MentorSchedule.findById(req.params.id)
-        .populate('mentorId', 'name image_url');
+        .populate('mentorId', 'name image_url email phone');
 
       const transformedSchedule = {
         ...updatedSchedule.toObject(),
