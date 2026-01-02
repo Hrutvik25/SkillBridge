@@ -49,7 +49,7 @@ export default function MentorScheduleDashboard() {
   const [defaultMentors, setDefaultMentors] = useState<DefaultMentor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [collegeFilter, setCollegeFilter] = useState<string>('');
+  const [collegeFilter, setCollegeFilter] = useState<string>('ALL');
   
   // Dialog states
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
@@ -102,22 +102,9 @@ export default function MentorScheduleDashboard() {
   const pollingInterval = useRef<NodeJS.Timeout | null>(null);
 
   const filteredSchedules = useMemo(() => {
-    if (!collegeFilter) {
-      return schedules;
-    }
-    return schedules.filter(schedule => schedule.college === collegeFilter);
+    if (collegeFilter === 'ALL') return schedules;
+    return schedules.filter(s => s.college === collegeFilter);
   }, [schedules, collegeFilter]);
-
-  // Handle special case when "Add New College" is selected
-  useEffect(() => {
-    if (formData.college === "__new_college__") {
-      setFormData(prev => ({
-        ...prev,
-        college: ""
-      }));
-      setShowNewCollegeDialog(true);
-    }
-  }, [formData.college]);
 
   useEffect(() => {
     loadSchedulesAndMentorsAndData();
@@ -464,16 +451,18 @@ export default function MentorScheduleDashboard() {
                 value={collegeFilter} 
                 onValueChange={setCollegeFilter}
               >
-                <SelectTrigger className="w-[200px]">
+                <SelectTrigger className="w-[220px]">
                   <SelectValue placeholder="Filter by college" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">All Colleges</SelectItem>
-                  {colleges.map((college) => (
-                    <SelectItem key={college._id} value={college.name}>
-                      {college.name}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="ALL">All Colleges</SelectItem>
+                  {colleges
+                    .filter(c => c.name?.trim())
+                    .map(college => (
+                      <SelectItem key={college._id} value={college.name}>
+                        {college.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -663,11 +652,13 @@ export default function MentorScheduleDashboard() {
                       <SelectValue placeholder="Select mentor" />
                     </SelectTrigger>
                     <SelectContent>
-                      {mentors.map((mentor) => (
-                        <SelectItem key={mentor._id} value={mentor._id}>
-                          {mentor.name}
-                        </SelectItem>
-                      ))}
+                      {mentors
+                        .filter(mentor => mentor._id && mentor._id.trim() !== '' && mentor.name && mentor.name.trim() !== '')
+                        .map((mentor) => (
+                          <SelectItem key={mentor._id} value={mentor._id}>
+                            {mentor.name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </div>
@@ -677,18 +668,29 @@ export default function MentorScheduleDashboard() {
                   <div className="flex gap-2">
                     <Select 
                       value={formData.college} 
-                      onValueChange={(value) => setFormData({ ...formData, college: value })}
+                      onValueChange={(value) => {
+                        setFormData({ ...formData, college: value });
+                        // Auto-populate location when college is selected
+                        const selectedCollege = colleges.find(c => c.name === value);
+                        if (selectedCollege) {
+                          setFormData(prev => ({
+                            ...prev,
+                            location: selectedCollege.location
+                          }));
+                        }
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select college" />
                       </SelectTrigger>
                       <SelectContent>
-                        {colleges.map((college) => (
-                          <SelectItem key={college._id} value={college.name}>
-                            {college.name}
-                          </SelectItem>
-                        ))}
-                        <SelectItem value="__new_college__">+ Add New College</SelectItem>
+                        {colleges
+                          .filter(college => college.name && college.name.trim() !== '')
+                          .map((college) => (
+                            <SelectItem key={college._id} value={college.name}>
+                              {college.name}
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <Button 
@@ -820,7 +822,7 @@ export default function MentorScheduleDashboard() {
                   </div>
                 )}
                 
-                {formData.mode === 'Offline' && (
+                {(formData.mode === 'Offline' || formData.mode === 'Hybrid') && (
                   <div className="space-y-2">
                     <Label htmlFor="location">Location</Label>
                     <Input
