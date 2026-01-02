@@ -45,6 +45,14 @@ const mentorSchema = new mongoose.Schema({
   created_at: {
     type: Date,
     default: Date.now
+  },
+  email: {
+    type: String,
+    default: null
+  },
+  phone: {
+    type: String,
+    default: null
   }
 });
 

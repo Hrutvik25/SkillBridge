@@ -149,7 +149,7 @@ router.delete('/gallery/:id', authenticate, requireAdmin, async (req, res) => {
 // Add mentor
 router.post('/mentors', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, title, bio, skills, active, image_url, linkedin, availability, display_order } = req.body;
+    const { name, title, bio, skills, active, image_url, linkedin, email, phone, availability, display_order } = req.body;
 
     const mentor = new Mentor({
       name,
@@ -157,6 +157,8 @@ router.post('/mentors', authenticate, requireAdmin, async (req, res) => {
       bio,
       image_url: image_url || null,
       linkedin: linkedin || null,
+      email: email || null,
+      phone: phone || null,
       skills: skills || [],
       availability: availability !== undefined ? availability : 'weekdays',
       active: active !== undefined ? active : true,
@@ -175,7 +177,7 @@ router.post('/mentors', authenticate, requireAdmin, async (req, res) => {
 // Update mentor
 router.put('/mentors/:id', authenticate, requireAdmin, async (req, res) => {
   try {
-    const { name, title, bio, skills, active, image_url, linkedin, availability, display_order } = req.body;
+    const { name, title, bio, skills, active, image_url, linkedin, email, phone, availability, display_order } = req.body;
     
     const mentor = await Mentor.findByIdAndUpdate(
       req.params.id,
@@ -187,6 +189,8 @@ router.put('/mentors/:id', authenticate, requireAdmin, async (req, res) => {
         active: active !== undefined ? active : true,
         image_url: image_url ?? null,
         linkedin: linkedin ?? null,
+        email: email ?? null,
+        phone: phone ?? null,
         availability: availability !== undefined ? availability : 'weekdays',
         display_order: display_order ?? 999
       },
