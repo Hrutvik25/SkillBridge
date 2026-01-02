@@ -5,7 +5,8 @@
     "scripts": {
         "start": "node index.js",
         "dev": "node --watch index.js",
-        "build-frontend": "cd ../../frontend && npm run build"
+        "build-frontend": "cd ../../frontend && npm run build",
+        "seed-colleges-mentors": "node scripts/seedCollegesAndMentors.js"
     },
     "dependencies": {
         "@sendgrid/mail": "^8.1.6",

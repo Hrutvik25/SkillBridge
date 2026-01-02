@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { format } from 'date-fns';
 import { 
   Plus, 
@@ -36,7 +36,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { mentorScheduleApi, mentorsApi, Mentor } from '@/lib/api';
+import { mentorScheduleApi, mentorsApi, Mentor, collegesApi, defaultMentorsApi } from '@/lib/api';
+import { College, DefaultMentor } from '@/lib/types';
 import { MentorSchedule, CreateMentorSchedulePayload, UpdateMentorSchedulePayload } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { CSVLink } from 'react-csv';
@@ -44,19 +45,44 @@ import { CSVLink } from 'react-csv';
 export default function MentorScheduleDashboard() {
   const [schedules, setSchedules] = useState<MentorSchedule[]>([]);
   const [mentors, setMentors] = useState<Mentor[]>([]);
+  const [colleges, setColleges] = useState<College[]>([]);
+  const [defaultMentors, setDefaultMentors] = useState<DefaultMentor[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [collegeFilter, setCollegeFilter] = useState<string>('');
   
   // Dialog states
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
   const [showViewDialog, setShowViewDialog] = useState(false);
+  const [showNewCollegeDialog, setShowNewCollegeDialog] = useState(false);
+  const [newCollegeName, setNewCollegeName] = useState('');
+  const [newCollegeLocation, setNewCollegeLocation] = useState('');
   const [currentSchedule, setCurrentSchedule] = useState<MentorSchedule | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
   // Form state
-  const [formData, setFormData] = useState({
+  // Form state
+  const [formData, setFormData] = useState<{
+    courseName: string;
+    mentorId: string;
+    college: string;
+    courseLevel: 'Beginner' | 'Advanced' | 'Project Based' | 'Hackathon';
+    mentorAvailability: 'Available' | 'Not Available';
+    confirmationStatus: 'Pending' | 'Confirmed' | 'Rejected';
+    courseContentReady: 'Yes' | 'No';
+    lectureDate: string;
+    lectureTime: string;
+    mode: 'Online' | 'Offline' | 'Hybrid';
+    meetingLink: string;
+    location: string;
+    mentorEmail: string;
+    mentorMobile: string;
+    sessionStatus: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
+    emailStatus: 'Not Sent' | 'Sent' | 'Failed';
+  }>({
     courseName: '',
     mentorId: '',
+    college: '',
     courseLevel: 'Beginner',
     mentorAvailability: 'Available',
     confirmationStatus: 'Pending',
@@ -75,8 +101,26 @@ export default function MentorScheduleDashboard() {
   const { toast } = useToast();
   const pollingInterval = useRef<NodeJS.Timeout | null>(null);
 
+  const filteredSchedules = useMemo(() => {
+    if (!collegeFilter) {
+      return schedules;
+    }
+    return schedules.filter(schedule => schedule.college === collegeFilter);
+  }, [schedules, collegeFilter]);
+
+  // Handle special case when "Add New College" is selected
   useEffect(() => {
-    loadSchedulesAndMentors();
+    if (formData.college === "__new_college__") {
+      setFormData(prev => ({
+        ...prev,
+        college: ""
+      }));
+      setShowNewCollegeDialog(true);
+    }
+  }, [formData.college]);
+
+  useEffect(() => {
+    loadSchedulesAndMentorsAndData();
     
     // Set up polling to check for updates (every 30 seconds)
     pollingInterval.current = setInterval(async () => {
@@ -116,10 +160,36 @@ export default function MentorScheduleDashboard() {
     }
   };
 
+  const loadSchedulesAndMentorsAndData = async () => {
+    try {
+      setLoading(true);
+      const [schedulesData, mentorsData, collegesData, defaultMentorsData] = await Promise.all([
+        mentorScheduleApi.getAll(),
+        mentorsApi.getAll(),
+        collegesApi.getAll(),
+        defaultMentorsApi.getAll()
+      ]);
+      setSchedules(schedulesData);
+      setMentors(mentorsData);
+      setColleges(collegesData);
+      setDefaultMentors(defaultMentorsData);
+    } catch (err) {
+      setError('Failed to load schedules, mentors, colleges, and default mentors');
+      toast({
+        title: 'Error',
+        description: 'Failed to load schedules, mentors, colleges, and default mentors',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleAddSchedule = () => {
     setFormData({
       courseName: '',
       mentorId: '',
+      college: '',
       courseLevel: 'Beginner',
       mentorAvailability: 'Available',
       confirmationStatus: 'Pending',
@@ -143,6 +213,7 @@ export default function MentorScheduleDashboard() {
     setFormData({
       courseName: schedule.courseName,
       mentorId: schedule.mentorId,
+      college: schedule.college,
       courseLevel: schedule.courseLevel,
       mentorAvailability: schedule.mentorAvailability,
       confirmationStatus: schedule.confirmationStatus,
@@ -253,11 +324,38 @@ export default function MentorScheduleDashboard() {
     return mentor ? mentor.image_url : null;
   };
 
+  const handleAddNewCollege = async () => {
+    try {
+      const newCollege = await collegesApi.create({
+        name: newCollegeName,
+        location: newCollegeLocation
+      });
+      
+      setColleges([...colleges, newCollege]);
+      toast({
+        title: 'Success',
+        description: 'College added successfully',
+      });
+      
+      // Reset form and close dialog
+      setShowNewCollegeDialog(false);
+      setNewCollegeName('');
+      setNewCollegeLocation('');
+    } catch (err) {
+      toast({
+        title: 'Error',
+        description: 'Failed to add college',
+        variant: 'destructive',
+      });
+    }
+  };
+
   // Function to prepare CSV data
   const prepareCSVData = () => {
     return schedules.map(schedule => ({
       'Course Name': schedule.courseName,
       'Mentor Name': schedule.mentor?.name || getMentorName(schedule.mentorId),
+      'College': schedule.college,
       'Course Level': schedule.courseLevel,
       'Mentor Availability': schedule.mentorAvailability,
       'Confirmation Status': schedule.confirmationStatus,
@@ -280,6 +378,7 @@ export default function MentorScheduleDashboard() {
   const csvHeaders = [
     { label: 'Course Name', key: 'Course Name' },
     { label: 'Mentor Name', key: 'Mentor Name' },
+    { label: 'College', key: 'College' },
     { label: 'Course Level', key: 'Course Level' },
     { label: 'Mentor Availability', key: 'Mentor Availability' },
     { label: 'Confirmation Status', key: 'Confirmation Status' },
@@ -331,33 +430,53 @@ export default function MentorScheduleDashboard() {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <h1 className="text-3xl font-bold">Mentor Schedules</h1>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              onClick={loadSchedulesAndMentors}
-              disabled={loading}
-            >
-              Refresh
-            </Button>
-            {schedules.length > 0 && (
-              <CSVLink 
-                data={csvData} 
-                headers={csvHeaders}
-                filename="mentor-schedules.csv"
-                className="no-underline"
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                onClick={loadSchedulesAndMentors}
+                disabled={loading}
               >
-                <Button variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export CSV
-                </Button>
-              </CSVLink>
-            )}
-            <Button onClick={handleAddSchedule}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Schedule
-            </Button>
+                Refresh
+              </Button>
+              {schedules.length > 0 && (
+                <CSVLink 
+                  data={csvData} 
+                  headers={csvHeaders}
+                  filename="mentor-schedules.csv"
+                  className="no-underline"
+                >
+                  <Button variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export CSV
+                  </Button>
+                </CSVLink>
+              )}
+              <Button onClick={handleAddSchedule}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Schedule
+              </Button>
+            </div>
+            <div className="flex gap-2 mt-2 sm:mt-0">
+              <Select 
+                value={collegeFilter} 
+                onValueChange={setCollegeFilter}
+              >
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Filter by college" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Colleges</SelectItem>
+                  {colleges.map((college) => (
+                    <SelectItem key={college._id} value={college.name}>
+                      {college.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
@@ -385,14 +504,14 @@ export default function MentorScheduleDashboard() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {schedules.length === 0 ? (
+                {filteredSchedules.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
                       No schedules found
                     </TableCell>
                   </TableRow>
                 ) : (
-                  schedules.map((schedule) => (
+                  filteredSchedules.map((schedule) => (
                     <TableRow key={schedule._id}>
                       <TableCell className="font-medium">{schedule.courseName}</TableCell>
                       <TableCell>
@@ -526,14 +645,17 @@ export default function MentorScheduleDashboard() {
                     value={formData.mentorId} 
                     onValueChange={(value) => {
                       setFormData({ ...formData, mentorId: value });
-                      // Auto-populate mentor email and mobile if available
-                      const mentor = mentors.find(m => m._id === value);
-                      if (mentor) {
-                        setFormData(prev => ({
-                          ...prev,
-                          mentorEmail: prev.mentorEmail,
-                          mentorMobile: prev.mentorMobile
-                        }));
+                      // Auto-populate mentor email and mobile if available in default mentors
+                      const selectedMentor = mentors.find(m => m._id === value);
+                      if (selectedMentor) {
+                        const defaultMentor = defaultMentors.find(m => m.name === selectedMentor.name);
+                        if (defaultMentor) {
+                          setFormData(prev => ({
+                            ...prev,
+                            mentorEmail: defaultMentor.email,
+                            mentorMobile: defaultMentor.phone
+                          }));
+                        }
                       }
                     }}
                   >
@@ -548,6 +670,36 @@ export default function MentorScheduleDashboard() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="college">College</Label>
+                  <div className="flex gap-2">
+                    <Select 
+                      value={formData.college} 
+                      onValueChange={(value) => setFormData({ ...formData, college: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select college" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {colleges.map((college) => (
+                          <SelectItem key={college._id} value={college.name}>
+                            {college.name}
+                          </SelectItem>
+                        ))}
+                        <SelectItem value="__new_college__">+ Add New College</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setShowNewCollegeDialog(true)}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
@@ -877,6 +1029,53 @@ export default function MentorScheduleDashboard() {
                 </div>
               </div>
             )}
+          </DialogContent>
+        </Dialog>
+
+        {/* Add New College Dialog */}
+        <Dialog open={showNewCollegeDialog} onOpenChange={setShowNewCollegeDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Add New College</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="newCollegeName">College Name</Label>
+                <Input
+                  id="newCollegeName"
+                  value={newCollegeName}
+                  onChange={(e) => setNewCollegeName(e.target.value)}
+                  placeholder="Enter college name"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="newCollegeLocation">Location</Label>
+                <Input
+                  id="newCollegeLocation"
+                  value={newCollegeLocation}
+                  onChange={(e) => setNewCollegeLocation(e.target.value)}
+                  placeholder="Enter location"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowNewCollegeDialog(false);
+                  setNewCollegeName('');
+                  setNewCollegeLocation('');
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                onClick={handleAddNewCollege}
+                disabled={!newCollegeName || !newCollegeLocation}
+              >
+                Add College
+              </Button>
+            </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>

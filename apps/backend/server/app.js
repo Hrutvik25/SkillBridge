@@ -19,6 +19,8 @@ import adminRoutes from './routes/admin.js';
 import galleryRoutes from './routes/gallery.js';
 import mentorScheduleRoutes from './routes/mentorSchedule.js';
 import mentorConfirmationRoutes from './routes/mentorConfirmation.js';
+import collegesRoutes from './routes/colleges.js';
+import defaultMentorsRoutes from './routes/defaultMentors.js';
 
 dotenv.config();
 
@@ -61,6 +63,8 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/gallery', galleryRoutes);
 app.use('/api/mentor-schedule', mentorScheduleRoutes);
 app.use('/mentor-confirmation', mentorConfirmationRoutes);
+app.use('/api/colleges', collegesRoutes);
+app.use('/api/default-mentors', defaultMentorsRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

@@ -73,11 +73,12 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
       meetingLink,
       location,
       mentorEmail,
-      mentorMobile
+      mentorMobile,
+      college
     } = req.body;
 
     // Validate required fields
-    if (!courseName || !mentorId || !courseLevel || !lectureDate || !lectureTime || !mode) {
+    if (!courseName || !mentorId || !courseLevel || !lectureDate || !lectureTime || !mode || !college) {
       return res.status(400).json({ error: 'All required fields must be provided' });
     }
 
@@ -121,6 +122,7 @@ router.post('/', authenticate, requireAdmin, async (req, res) => {
       location: mode === 'Offline' ? location : null,
       mentorEmail,
       mentorMobile,
+      college,
       sessionStatus,
       emailStatus: 'Not Sent'
     });
@@ -164,6 +166,7 @@ router.put('/:id', authenticate, requireAdmin, async (req, res) => {
       location,
       mentorEmail,
       mentorMobile,
+      college,
       sessionStatus,
       emailStatus
     } = req.body;
@@ -182,6 +185,7 @@ router.put('/:id', authenticate, requireAdmin, async (req, res) => {
     if (location) updateData.location = mode === 'Offline' ? location : null;
     if (mentorEmail) updateData.mentorEmail = mentorEmail;
     if (mentorMobile) updateData.mentorMobile = mentorMobile;
+    if (college) updateData.college = college;
     if (sessionStatus) updateData.sessionStatus = sessionStatus;
     if (emailStatus) updateData.emailStatus = emailStatus;
 

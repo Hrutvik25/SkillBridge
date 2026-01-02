@@ -1,4 +1,4 @@
-import type { MentorAvailability, TeamMember } from "./types";
+import type { MentorAvailability, TeamMember, MentorSchedule, CreateMentorSchedulePayload, UpdateMentorSchedulePayload, College, DefaultMentor } from "./types";
 
 /**
  * IMPORTANT:
@@ -395,6 +395,58 @@ export const mentorScheduleApi = {
   sendEmail: async (id: string) =>
     apiRequest<{ message: string }>(`/mentor-schedule/${id}/send-email`, {
       method: "POST",
+    }),
+};
+
+// =====================
+// Colleges API
+// =====================
+export const collegesApi = {
+  getAll: async () => apiRequest<College[]>("/colleges"),
+
+  getById: async (id: string) => apiRequest<College>(`/colleges/${id}`),
+
+  create: async (college: { name: string; location: string }) =>
+    apiRequest<College>("/colleges", {
+      method: "POST",
+      body: JSON.stringify(college),
+    }),
+
+  update: async (id: string, college: Partial<College>) =>
+    apiRequest<College>(`/colleges/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(college),
+    }),
+
+  delete: async (id: string) =>
+    apiRequest<{ message: string }>(`/colleges/${id}`, {
+      method: "DELETE",
+    }),
+};
+
+// =====================
+// Default Mentors API
+// =====================
+export const defaultMentorsApi = {
+  getAll: async () => apiRequest<DefaultMentor[]>("/default-mentors"),
+
+  getById: async (id: string) => apiRequest<DefaultMentor>(`/default-mentors/${id}`),
+
+  create: async (mentor: { name: string; phone: string; email: string }) =>
+    apiRequest<DefaultMentor>("/default-mentors", {
+      method: "POST",
+      body: JSON.stringify(mentor),
+    }),
+
+  update: async (id: string, mentor: Partial<DefaultMentor>) =>
+    apiRequest<DefaultMentor>(`/default-mentors/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(mentor),
+    }),
+
+  delete: async (id: string) =>
+    apiRequest<{ message: string }>(`/default-mentors/${id}`, {
+      method: "DELETE",
     }),
 };
 

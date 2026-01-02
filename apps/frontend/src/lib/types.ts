@@ -61,6 +61,7 @@ export interface MentorSchedule {
     name: string;
     image_url: string;
   };
+  college: string;
   courseLevel: 'Beginner' | 'Advanced' | 'Project Based' | 'Hackathon';
   mentorAvailability: 'Available' | 'Not Available';
   confirmationStatus: 'Pending' | 'Confirmed' | 'Rejected';
@@ -74,6 +75,23 @@ export interface MentorSchedule {
   mentorMobile: string;
   sessionStatus: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
   emailStatus: 'Not Sent' | 'Sent' | 'Failed';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface College {
+  _id?: string;
+  name: string;
+  location: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface DefaultMentor {
+  _id?: string;
+  name: string;
+  phone: string;
+  email: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -92,6 +110,7 @@ export interface CreateMentorSchedulePayload {
   location?: string;
   mentorEmail: string;
   mentorMobile: string;
+  college: string;
   sessionStatus?: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
 }
 
@@ -109,6 +128,7 @@ export interface UpdateMentorSchedulePayload {
   location?: string;
   mentorEmail?: string;
   mentorMobile?: string;
+  college?: string;
   sessionStatus?: 'Scheduled' | 'Completed' | 'Cancelled' | 'Rescheduled';
   emailStatus?: 'Not Sent' | 'Sent' | 'Failed';
 }

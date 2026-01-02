@@ -60,6 +60,10 @@ const mentorScheduleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  college: {
+    type: String,
+    required: true
+  },
   sessionStatus: {
     type: String,
     enum: ['Scheduled', 'Completed', 'Cancelled', 'Rescheduled'],
