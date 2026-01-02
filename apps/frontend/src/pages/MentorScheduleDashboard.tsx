@@ -12,7 +12,9 @@ import {
   CheckCircle,
   XCircle,
   AlertCircle,
-  Download
+  Download,
+  ChevronsUpDown,
+  Search
 } from 'lucide-react';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
@@ -36,6 +38,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { mentorScheduleApi, mentorsApi, Mentor, collegesApi, defaultMentorsApi } from '@/lib/api';
 import { College, DefaultMentor } from '@/lib/types';
 import { MentorSchedule, CreateMentorSchedulePayload, UpdateMentorSchedulePayload } from '@/lib/types';
@@ -50,6 +54,7 @@ export default function MentorScheduleDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [collegeFilter, setCollegeFilter] = useState<string>('ALL');
+  const [collegeFilterOpen, setCollegeFilterOpen] = useState(false);
   
   // Dialog states
   const [showAddEditDialog, setShowAddEditDialog] = useState(false);
@@ -59,6 +64,7 @@ export default function MentorScheduleDashboard() {
   const [newCollegeLocation, setNewCollegeLocation] = useState('');
   const [currentSchedule, setCurrentSchedule] = useState<MentorSchedule | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [collegeSelectOpen, setCollegeSelectOpen] = useState(false);
 
   // Form state
   // Form state
@@ -338,8 +344,8 @@ export default function MentorScheduleDashboard() {
   };
 
   // Function to prepare CSV data
-  const prepareCSVData = () => {
-    return schedules.map(schedule => ({
+  const prepareCSVData = (schedulesToExport: MentorSchedule[]) => {
+    return schedulesToExport.map(schedule => ({
       'Course Name': schedule.courseName,
       'Mentor Name': schedule.mentor?.name || getMentorName(schedule.mentorId),
       'College': schedule.college,
@@ -383,7 +389,7 @@ export default function MentorScheduleDashboard() {
     { label: 'Updated At', key: 'Updated At' }
   ];
 
-  const csvData = prepareCSVData();
+  const csvData = prepareCSVData(filteredSchedules);
 
   if (loading) {
     return (
@@ -428,11 +434,11 @@ export default function MentorScheduleDashboard() {
               >
                 Refresh
               </Button>
-              {schedules.length > 0 && (
+              {filteredSchedules.length > 0 && (
                 <CSVLink 
                   data={csvData} 
                   headers={csvHeaders}
-                  filename="mentor-schedules.csv"
+                  filename={`mentor-schedules-${collegeFilter === 'ALL' ? 'all' : collegeFilter.replace(/\s+/g, '_')}.csv`}
                   className="no-underline"
                 >
                   <Button variant="outline">
@@ -447,24 +453,53 @@ export default function MentorScheduleDashboard() {
               </Button>
             </div>
             <div className="flex gap-2 mt-2 sm:mt-0">
-              <Select 
-                value={collegeFilter} 
-                onValueChange={setCollegeFilter}
-              >
-                <SelectTrigger className="w-[220px]">
-                  <SelectValue placeholder="Filter by college" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="ALL">All Colleges</SelectItem>
-                  {colleges
-                    .filter(c => c.name?.trim())
-                    .map(college => (
-                      <SelectItem key={college._id} value={college.name}>
-                        {college.name}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
-              </Select>
+              <Popover open={collegeFilterOpen} onOpenChange={setCollegeFilterOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={collegeFilterOpen}
+                    className="w-[220px] justify-between truncate"
+                  >
+                    <span className="truncate">
+                      {collegeFilter === 'ALL' 
+                        ? 'Filter by college' 
+                        : collegeFilter}
+                    </span>
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[220px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search college..." />
+                    <CommandList>
+                      <CommandEmpty>No college found.</CommandEmpty>
+                      <CommandGroup>
+                        <CommandItem value="ALL" onSelect={() => {
+                          setCollegeFilter('ALL');
+                          setCollegeFilterOpen(false);
+                        }}>
+                          All Colleges
+                        </CommandItem>
+                        {colleges
+                          .filter(c => c.name?.trim())
+                          .map(college => (
+                            <CommandItem
+                              key={college._id}
+                              value={college.name}
+                              onSelect={(currentValue) => {
+                                setCollegeFilter(currentValue === collegeFilter ? "" : currentValue);
+                                setCollegeFilterOpen(false);
+                              }}
+                            >
+                              {college.name}
+                            </CommandItem>
+                          ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
@@ -666,33 +701,53 @@ export default function MentorScheduleDashboard() {
                 <div className="space-y-2">
                   <Label htmlFor="college">College</Label>
                   <div className="flex gap-2">
-                    <Select 
-                      value={formData.college} 
-                      onValueChange={(value) => {
-                        setFormData({ ...formData, college: value });
-                        // Auto-populate location when college is selected
-                        const selectedCollege = colleges.find(c => c.name === value);
-                        if (selectedCollege) {
-                          setFormData(prev => ({
-                            ...prev,
-                            location: selectedCollege.location
-                          }));
-                        }
-                      }}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select college" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {colleges
-                          .filter(college => college.name && college.name.trim() !== '')
-                          .map((college) => (
-                            <SelectItem key={college._id} value={college.name}>
-                              {college.name}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover open={collegeSelectOpen} onOpenChange={setCollegeSelectOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={collegeSelectOpen}
+                          className="w-full justify-between truncate"
+                        >
+                          <span className="truncate">
+                            {formData.college ? formData.college : "Select college..."}
+                          </span>
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0">
+                        <Command>
+                          <CommandInput placeholder="Search college..." />
+                          <CommandList>
+                            <CommandEmpty>No college found.</CommandEmpty>
+                            <CommandGroup>
+                              {colleges
+                                .filter(college => college.name && college.name.trim() !== '')
+                                .map((college) => (
+                                  <CommandItem
+                                    key={college._id}
+                                    value={college.name}
+                                    onSelect={(currentValue) => {
+                                      setFormData({ ...formData, college: currentValue });
+                                      // Auto-populate location when college is selected
+                                      const selectedCollege = colleges.find(c => c.name === currentValue);
+                                      if (selectedCollege) {
+                                        setFormData(prev => ({
+                                          ...prev,
+                                          location: selectedCollege.location
+                                        }));
+                                      }
+                                      setCollegeSelectOpen(false);
+                                    }}
+                                  >
+                                    {college.name}
+                                  </CommandItem>
+                                ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                     <Button 
                       type="button" 
                       variant="outline" 

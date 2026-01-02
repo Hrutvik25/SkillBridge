@@ -5,6 +5,7 @@ import Mentor from '../models/Mentor.js';
 import TeamMember from '../models/TeamMember.js';
 import Enrollment from '../models/Enrollment.js';
 import ContactMessage from '../models/ContactMessage.js';
+import MentorSchedule from '../models/MentorSchedule.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 import multer from 'multer';
 import path from 'path';
@@ -216,6 +217,17 @@ router.delete('/mentors/:id', authenticate, requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Delete mentor error:', error);
     res.status(500).json({ error: 'Failed to delete mentor' });
+  }
+});
+
+// Delete all schedules for a specific mentor
+router.delete('/mentors/:id/schedules', authenticate, requireAdmin, async (req, res) => {
+  try {
+    const result = await MentorSchedule.deleteMany({ mentorId: req.params.id });
+    res.json({ message: `${result.deletedCount} schedules deleted` });
+  } catch (error) {
+    console.error('Delete mentor schedules error:', error);
+    res.status(500).json({ error: 'Failed to delete mentor schedules' });
   }
 });
 

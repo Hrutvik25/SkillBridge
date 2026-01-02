@@ -33,6 +33,8 @@ export default function AdminDashboard() {
   // Form states
   const [mentorForm, setMentorForm] = useState({ name: "", title: "", bio: "", skills: "", image_url: "", linkedin: "", email: "", phone: "", availability: "weekdays" as MentorAvailability });
   const [editingMentorId, setEditingMentorId] = useState<string | null>(null);
+  const [mentorToDelete, setMentorToDelete] = useState<{id: string, name: string} | null>(null);
+  const [deleteAssociatedSchedules, setDeleteAssociatedSchedules] = useState(false);
   
   const [courseForm, setCourseForm] = useState<CourseFormState & { image?: string; published?: boolean }>({
     course_name: "",
@@ -262,13 +264,35 @@ export default function AdminDashboard() {
   }
 
   async function deleteMentor(id: string) {
+    // Show confirmation dialog
+    setMentorToDelete({ id, name: mentors.find(m => m._id === id)?.name || 'Unknown' });
+  }
+
+  async function confirmDeleteMentor() {
+    if (!mentorToDelete) return;
+    
     try {
-      await adminApi.deleteMentor(id);
-      toast({ title: "Mentor deleted" });
+      if (deleteAssociatedSchedules) {
+        // First delete all associated schedules
+        await adminApi.deleteMentorSchedules(mentorToDelete.id);
+      }
+      
+      // Then delete the mentor
+      await adminApi.deleteMentor(mentorToDelete.id);
+      
+      toast({ title: `Mentor ${mentorToDelete.name} deleted` });
       fetchData();
+      setMentorToDelete(null);
+      setDeleteAssociatedSchedules(false);
     } catch (error) {
       console.error('Failed to delete mentor:', error);
+      toast({ title: "Error", description: "Failed to delete mentor", variant: "destructive" });
     }
+  }
+
+  function cancelDeleteMentor() {
+    setMentorToDelete(null);
+    setDeleteAssociatedSchedules(false);
   }
 
   async function toggleMentorVisibility(id: string, currentActive: boolean) {
@@ -519,6 +543,41 @@ export default function AdminDashboard() {
               </table>
             </div>
           </TabsContent>
+
+          {/* Confirmation Dialog for Deleting Mentor */}
+          {mentorToDelete && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <div className="bg-background rounded-lg border border-border p-6 max-w-md w-full space-y-4">
+                <h3 className="text-lg font-semibold">Confirm Delete</h3>
+                <p className="text-muted-foreground">
+                  Are you sure you want to delete the mentor <strong>{mentorToDelete.name}</strong>? This action cannot be undone.
+                </p>
+                <div className="flex items-center gap-2 pt-2">
+                  <input
+                    type="checkbox"
+                    id="delete-schedules"
+                    checked={deleteAssociatedSchedules}
+                    onChange={(e) => setDeleteAssociatedSchedules(e.target.checked)}
+                    className="h-4 w-4"
+                  />
+                  <label htmlFor="delete-schedules" className="text-sm">
+                    Also delete associated schedules
+                  </label>
+                </div>
+                <div className="flex justify-end gap-2 pt-4">
+                  <Button variant="outline" onClick={cancelDeleteMentor}>
+                    Cancel
+                  </Button>
+                  <Button 
+                    variant="destructive" 
+                    onClick={confirmDeleteMentor}
+                  >
+                    Delete Mentor
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
 
           <TabsContent value="courses" className="mt-6">
             <div className="flex justify-between items-center mb-4">

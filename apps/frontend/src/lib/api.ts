@@ -203,6 +203,11 @@ export const adminApi = {
       method: "DELETE",
     }),
 
+  deleteMentorSchedules: async (mentorId: string) =>
+    apiRequest<{ message: string }>(`/admin/mentors/${mentorId}/schedules`, {
+      method: "DELETE",
+    }),
+
   addCourse: async (course: Partial<Course>) =>
     apiRequest<Course>("/admin/courses", {
       method: "POST",
