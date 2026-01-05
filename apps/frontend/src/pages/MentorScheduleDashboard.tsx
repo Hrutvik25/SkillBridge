@@ -669,17 +669,15 @@ export default function MentorScheduleDashboard() {
                     value={formData.mentorId} 
                     onValueChange={(value) => {
                       setFormData({ ...formData, mentorId: value });
-                      // Auto-populate mentor email and mobile if available in default mentors
+                      // Auto-populate mentor email and mobile from the mentors table with fallback to default mentors
                       const selectedMentor = mentors.find(m => m._id === value);
                       if (selectedMentor) {
                         const defaultMentor = defaultMentors.find(m => m.name === selectedMentor.name);
-                        if (defaultMentor) {
-                          setFormData(prev => ({
-                            ...prev,
-                            mentorEmail: defaultMentor.email,
-                            mentorMobile: defaultMentor.phone
-                          }));
-                        }
+                        setFormData(prev => ({
+                          ...prev,
+                          mentorEmail: (selectedMentor as any).email || defaultMentor?.email || '',
+                          mentorMobile: (selectedMentor as any).phone || defaultMentor?.phone || ''
+                        }));
                       }
                     }}
                   >
